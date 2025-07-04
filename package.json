@@ -1,0 +1,46 @@
+{
+  "name": "realtime-conversation-helper",
+  "version": "1.0.0",
+  "description": "A real-time speech transcription application that uses Google Speech-to-Text API for transcription and Google Gemini AI for generating contextual suggestions and AI chat capabilities based on the transcribed speech.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron",
+    "speech-to-text",
+    "ai",
+    "transcription",
+    "google-speech",
+    "gemini-ai",
+    "real-time"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1"
+  },
+  "build": {
+    "appId": "com.example.realtime-conversation-helper",
+    "productName": "Realtime Conversation Helper",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/**/*",
+      "!dist/**/*"
+    ]
+  }
+}
