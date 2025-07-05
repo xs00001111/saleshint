@@ -303,6 +303,7 @@ async function handleEvent(event: Stripe.Event) {
     return;
   }
 
+  console.log(`🔄 Processing event ${event.type} for customer: ${customerId}`);
   let isSubscription = true;
 
   if (event.type === 'checkout.session.completed') {
@@ -318,6 +319,12 @@ async function handleEvent(event: Stripe.Event) {
     
     // ① Ensure the stripe_customers mapping exists first
     await ensureStripeCustomer(customerId, stripeData);
+    
+    // Add a small delay to ensure Stripe has fully processed the subscription
+    if (event.type === 'checkout.session.completed') {
+      console.log(`⏳ Waiting 2 seconds for Stripe to fully process subscription...`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
     
     // ② Then sync the subscription data
     await syncCustomerFromStripe(customerId);
@@ -402,6 +409,11 @@ async function syncCustomerFromStripe(customerId: string) {
     }
 
     console.log(`📊 Found ${subs.data.length} subscriptions for customer: ${customerId}`);
+    
+    // Log detailed subscription statuses for debugging
+    subs.data.forEach(sub => {
+      console.log(`📋 Subscription ${sub.id}: status=${sub.status}, period_end=${sub.current_period_end}`);
+    });
 
     /* 2 ───── (re-)insert every subscription row ───────────── */
     for (const s of subs.data) {
@@ -438,30 +450,58 @@ async function syncCustomerFromStripe(customerId: string) {
     }, { onConflict: 'customer_id' });
 
     /* 4 ───── pick the "current" plan for the frontend ─────── */
-    const current = subs.data
-      .filter((s) => ['active', 'trialing'].includes(s.status))
-      .sort((a, b) => b.current_period_end - a.current_period_end)[0] || null;
+    // More comprehensive status checking and better sorting
+    const activeSubs = subs.data.filter((s) => ['active', 'trialing'].includes(s.status));
+    console.log(`🔍 Found ${activeSubs.length} active/trialing subscriptions`);
+    
+    // If no active/trialing, check for incomplete that might become active
+    const potentialSubs = activeSubs.length > 0 ? activeSubs : 
+      subs.data.filter((s) => ['incomplete', 'past_due'].includes(s.status));
+    
+    console.log(`🔍 Considering ${potentialSubs.length} potential subscriptions`);
+    
+    const current = potentialSubs
+      .sort((a, b) => {
+        // Prioritize by status first (active > trialing > others)
+        const statusPriority = { 'active': 3, 'trialing': 2, 'incomplete': 1, 'past_due': 0 };
+        const aPriority = statusPriority[a.status] || -1;
+        const bPriority = statusPriority[b.status] || -1;
+        
+        if (aPriority !== bPriority) {
+          return bPriority - aPriority;
+        }
+        
+        // Then by period end (most recent)
+        return (b.current_period_end || 0) - (a.current_period_end || 0);
+      })[0] || null;
 
-    console.log(`🎯 Current active subscription: ${current?.id || 'none'}`);
+    console.log(`🎯 Current subscription: ${current?.id || 'none'} (status: ${current?.status || 'none'})`);
 
     // Only update user_plans if we have a valid user_id
     if (userId) {
+      // Determine plan type and status based on subscription
+      const hasActiveSubscription = current && ['active', 'trialing'].includes(current.status);
+      const planType = hasActiveSubscription ? 'monthly' : 'free';
+      const planStatus = hasActiveSubscription ? 'active' : 'inactive';
+      
       const planData = {
         user_id: userId,
-        plan_type: current ? 'monthly' : 'free',
-        status: 'active',
+        plan_type: planType,
+        status: planStatus,
         stripe_subscription_id: current?.id || null,
         stripe_customer_id: customerId,
         subscription_id: current?.id || null,
         plan_updated_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
+      
+      console.log(`👤 Setting user plan: ${planType} (${planStatus}) for user ${userId}`);
 
       // Try multiple approaches to save user plan
       await safeUpsert('user_plans', planData, { onConflict: 'user_id' });
       await safeInsert('user_plans', planData); // Backup insert
       
-      console.log(`👤 ✅ Updated user plan for: ${userId} -> ${planData.plan_type}`);
+      console.log(`👤 ✅ Updated user plan for: ${userId} -> ${planData.plan_type} (${planData.status})`);
     } else {
       console.log(`⚠️  Skipping user_plans update for ${customerId} - no user_id available`);
       console.log(`🔧 To fix this: ensure checkout sessions include client_reference_id or metadata.supabase_user_id`);
