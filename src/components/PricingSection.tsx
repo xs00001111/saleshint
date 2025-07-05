@@ -44,15 +44,15 @@ const PricingSection = () => {
                 {user ? (
                   <Link 
                     to="/dashboard"
-                    className="w-full btn bg-gray-200 text-gray-800 hover:bg-gray-300 mb-6 inline-flex items-center justify-center py-3"
+                    className="w-full btn bg-emerald-100 text-emerald-800 hover:bg-emerald-200 mb-6 inline-flex items-center justify-center py-3"
                   >
-                    Go to Dashboard
+                    Access Free Plan
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 ) : (
                   <Link 
                     to="/signup"
-                    className="w-full btn bg-gray-200 text-gray-800 hover:bg-gray-300 mb-6 inline-flex items-center justify-center py-3"
+                    className="w-full btn bg-emerald-100 text-emerald-800 hover:bg-emerald-200 mb-6 inline-flex items-center justify-center py-3"
                   >
                     Start Free Trial
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -65,7 +65,7 @@ const PricingSection = () => {
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <Check className="h-5 w-5 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">5 calls each for 5 minutes</span>
+                    <span className="text-gray-700">5 calls, 5 minutes each</span>
                   </li>
                   <li className="flex items-start">
                     <Check className="h-5 w-5 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -73,19 +73,19 @@ const PricingSection = () => {
                   </li>
                   <li className="flex items-start">
                     <Check className="h-5 w-5 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Email support</span>
+                    <span className="text-gray-700">Community support</span>
                   </li>
                   <li className="flex items-start">
                     <X className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-600">Advanced features locked</span>
+                    <span className="text-gray-600">Advanced AI insights</span>
                   </li>
                   <li className="flex items-start">
                     <X className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-600">Priority support locked</span>
+                    <span className="text-gray-600">Priority support</span>
                   </li>
                   <li className="flex items-start">
                     <X className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-600">Integrations locked</span>
+                    <span className="text-gray-600">CRM integrations</span>
                   </li>
                 </ul>
               </div>
