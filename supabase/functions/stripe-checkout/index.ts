@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
 
     console.log(`🔍 Creating checkout for user: ${user.id} (${user.email})`);
 
-    // Try to get existing customer, but don't fail if none exists
+    // Check for existing customer mapping
     const { data: customer, error: getCustomerError } = await supabase
       .from('stripe_customers')
       .select('customer_id')
@@ -84,10 +84,9 @@ Deno.serve(async (req) => {
       .is('deleted_at', null)
       .maybeSingle();
 
-    // Only fail if there's a real database error, not if no customer exists
-    if (getCustomerError && getCustomerError.code !== 'PGRST116') {
-      console.error('Database error fetching customer information:', getCustomerError);
-      return corsResponse({ error: 'Database error occurred' }, 500);
+    if (getCustomerError) {
+      console.error('Failed to fetch customer information from the database', getCustomerError);
+      return corsResponse({ error: 'Failed to fetch customer information' }, 500);
     }
 
     let customerId;
@@ -108,10 +107,17 @@ Deno.serve(async (req) => {
 
       console.log(`✅ Created new Stripe customer ${newCustomer.id} for user ${user.id}`);
 
-      const { error: createCustomerError } = await supabase.from('stripe_customers').insert({
+      // Create customer mapping with proper error handling
+      const customerMappingData = {
         user_id: user.id,
         customer_id: newCustomer.id,
-      });
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      const { error: createCustomerError } = await supabase
+        .from('stripe_customers')
+        .insert(customerMappingData);
 
       if (createCustomerError) {
         console.error('Failed to save customer information in the database', createCustomerError);
@@ -154,12 +160,14 @@ Deno.serve(async (req) => {
       customerId = customer.customer_id;
       console.log(`🔄 Using existing Stripe customer: ${customerId}`);
 
-      // Update the existing customer metadata to ensure user ID is available
+      // Ensure the existing customer has proper metadata
       try {
         await stripe.customers.update(customerId, {
+          email: user.email, // Ensure email is up to date
           metadata: {
             userId: user.id,
-            supabase_user_id: user.id, // Add this for webhook identification
+            supabase_user_id: user.id,
+            user_email: user.email
           },
         });
         console.log(`✅ Updated customer metadata for ${customerId}`);
@@ -200,29 +208,57 @@ Deno.serve(async (req) => {
     if (mode === 'subscription') {
       console.log(`🚀 Optimistically activating subscription for user: ${user.id}`);
       
+      // Check if user already has a plan to avoid conflicts
+      const { data: existingPlan } = await supabase
+        .from('user_plans')
+        .select('id, plan_type, status')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
       const optimisticPlanData = {
         user_id: user.id,
         plan_type: 'monthly',
         status: 'active',
-        stripe_subscription_id: null, // Will be updated by webhook
+        stripe_subscription_id: null,
         stripe_customer_id: customerId,
-        subscription_id: null, // Will be updated by webhook
+        subscription_id: null,
         plan_started_at: new Date().toISOString(),
         plan_updated_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
 
-      // Use upsert to handle existing records
-      const { error: optimisticError } = await supabase
-        .from('user_plans')
-        .upsert(optimisticPlanData, { 
-          onConflict: 'user_id',
-          ignoreDuplicates: false 
-        });
+      let optimisticError;
+      
+      if (existingPlan) {
+        // Update existing plan
+        const { error } = await supabase
+          .from('user_plans')
+          .update(optimisticPlanData)
+          .eq('user_id', user.id);
+        optimisticError = error;
+      } else {
+        // Insert new plan
+        const { error } = await supabase
+          .from('user_plans')
+          .insert(optimisticPlanData);
+        optimisticError = error;
+      }
 
       if (optimisticError) {
-        console.warn('Failed to set optimistic plan activation:', optimisticError);
-        // Don't fail checkout for this - webhook will handle it
+        console.warn('⚠️  Failed to set optimistic plan activation:', optimisticError);
+        // Try upsert as fallback
+        const { error: upsertError } = await supabase
+          .from('user_plans')
+          .upsert(optimisticPlanData, { 
+            onConflict: 'user_id',
+            ignoreDuplicates: false 
+          });
+        
+        if (upsertError) {
+          console.error('❌ All attempts to set optimistic activation failed:', upsertError);
+        } else {
+          console.log(`✅ Optimistically activated plan via upsert for user: ${user.id}`);
+        }
       } else {
         console.log(`✅ Optimistically activated plan for user: ${user.id}`);
       }
@@ -243,14 +279,20 @@ Deno.serve(async (req) => {
       success_url,
       cancel_url,
       metadata: {
-        supabase_user_id: user.id, // Additional backup for webhook
+        supabase_user_id: user.id,
         user_email: user.email,
+        customer_id: customerId
       },
     });
 
     console.log(`✅ Created checkout session ${session.id} for customer ${customerId} (user: ${user.id})`);
 
-    return corsResponse({ sessionId: session.id, url: session.url });
+    return corsResponse({ 
+      sessionId: session.id, 
+      url: session.url,
+      customerId: customerId,
+      userId: user.id
+    });
   } catch (error: any) {
     console.error(`Checkout error: ${error.message}`);
     return corsResponse({ error: error.message }, 500);

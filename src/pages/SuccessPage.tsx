@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { CheckCircle, ArrowRight, Loader2, AlertTriangle } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useSubscription } from '../hooks/useSubscription';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 import { analytics } from '../lib/analytics';
+import toast from 'react-hot-toast';
 
 const SuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const { subscription, loading, refetch } = useSubscription();
+  const { user } = useAuth();
   const [initialLoad, setInitialLoad] = useState(true);
+  const [manuallyCreated, setManuallyCreated] = useState(false);
+  const [processingManual, setProcessingManual] = useState(false);
 
   useEffect(() => {
     // Track successful payment page view
@@ -37,6 +43,53 @@ const SuccessPage: React.FC = () => {
     }
   }, [subscription, loading, initialLoad]);
 
+  const handleManualSubscriptionCreation = async () => {
+    if (!user || !sessionId) {
+      toast.error('Missing user or session information');
+      return;
+    }
+
+    setProcessingManual(true);
+    
+    try {
+      console.log(`🔧 Manually creating subscription for user ${user.id} with session ${sessionId}`);
+      
+      // First, try to get the checkout session details from Stripe via our edge function
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/manual-subscription-fix`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.access_token || ''}`,
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          user_id: user.id
+        }),
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create manual subscription');
+      }
+
+      console.log('✅ Manual subscription creation result:', result);
+      toast.success('Subscription activated successfully!');
+      setManuallyCreated(true);
+      
+      // Refetch subscription data
+      setTimeout(() => {
+        refetch();
+      }, 1000);
+      
+    } catch (error: any) {
+      console.error('❌ Manual subscription creation failed:', error);
+      toast.error(error.message || 'Failed to activate subscription');
+    } finally {
+      setProcessingManual(false);
+    }
+  };
+
   if (initialLoad || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex items-center justify-center">
@@ -49,17 +102,46 @@ const SuccessPage: React.FC = () => {
     );
   }
 
+  // Check if we need manual intervention
+  const needsManualFix = sessionId && !subscription && !manuallyCreated;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex items-center justify-center">
       <div className="max-w-md w-full mx-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="mb-6">
-            <CheckCircle className="h-16 w-16 text-emerald-500 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
-            <p className="text-gray-600">
-              Thank you for your purchase. Your account has been activated.
-            </p>
-          </div>
+          {needsManualFix ? (
+            <div className="mb-6">
+              <AlertTriangle className="h-16 w-16 text-amber-500 mx-auto mb-4" />
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Activation Needed</h1>
+              <p className="text-gray-600 mb-4">
+                Your payment was successful, but we need to activate your subscription.
+              </p>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-amber-700">
+                  Session ID: <code className="font-mono text-xs">{sessionId}</code>
+                </p>
+              </div>
+              <button
+                onClick={handleManualSubscriptionCreation}
+                disabled={processingManual}
+                className="w-full btn bg-emerald-600 text-white hover:bg-emerald-700 mb-4"
+              >
+                {processingManual ? (
+                  <Loader2 className="h-5 w-5 animate-spin mx-auto" />
+                ) : (
+                  'Activate My Subscription'
+                )}
+              </button>
+            </div>
+          ) : (
+            <div className="mb-6">
+              <CheckCircle className="h-16 w-16 text-emerald-500 mx-auto mb-4" />
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
+              <p className="text-gray-600">
+                Thank you for your purchase. Your account has been activated.
+              </p>
+            </div>
+          )}
 
           {subscription && (
             <div className="bg-emerald-50 rounded-lg p-4 mb-6">
@@ -73,24 +155,26 @@ const SuccessPage: React.FC = () => {
             </div>
           )}
 
-          <div className="space-y-4">
-            <Link
-              to="/dashboard"
-              onClick={() => analytics.track('success_page_dashboard_clicked')}
-              className="w-full btn bg-emerald-800 text-white hover:bg-emerald-900 shadow-lg hover:shadow-xl"
-            >
-              Go to Dashboard
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-            
-            <Link
-              to="/"
-              onClick={() => analytics.track('success_page_home_clicked')}
-              className="w-full btn bg-gray-100 text-gray-700 hover:bg-gray-200"
-            >
-              Back to Home
-            </Link>
-          </div>
+          {!needsManualFix && (
+            <div className="space-y-4">
+              <Link
+                to="/dashboard"
+                onClick={() => analytics.track('success_page_dashboard_clicked')}
+                className="w-full btn bg-emerald-800 text-white hover:bg-emerald-900 shadow-lg hover:shadow-xl"
+              >
+                Go to Dashboard
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              
+              <Link
+                to="/"
+                onClick={() => analytics.track('success_page_home_clicked')}
+                className="w-full btn bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                Back to Home
+              </Link>
+            </div>
+          )}
 
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">

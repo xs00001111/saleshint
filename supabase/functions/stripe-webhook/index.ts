@@ -196,7 +196,28 @@ async function findUserIdForCustomer(customerId: string, stripeData: any): Promi
       }
     }
 
-    // Method 4: Try to find user by email if available
+  } catch (stripeError) {
+    console.warn(`⚠️  Failed to fetch customer from Stripe:`, stripeError);
+  }
+
+  // Method 4: Check our database for existing mapping
+  const customerResult = await safeSelect('stripe_customers', 
+    supabase
+      .from('stripe_customers')
+      .select('user_id')
+      .eq('customer_id', customerId)
+      .maybeSingle()
+  );
+
+  if (customerResult.data?.user_id) {
+    userId = customerResult.data.user_id;
+    console.log(`📋 Found user_id in database mapping: ${userId}`);
+    return userId;
+  }
+
+  // Method 5: Try to find user by email if available (last resort)
+  try {
+    const customer = await stripe.customers.retrieve(customerId);
     if (customer && !customer.deleted && customer.email) {
       console.log(`📧 Trying to find user by email: ${customer.email}`);
       
@@ -206,6 +227,14 @@ async function findUserIdForCustomer(customerId: string, stripeData: any): Promi
         if (matchingUser) {
           userId = matchingUser.id;
           console.log(`📧 Found user by email lookup: ${userId}`);
+          
+          // Create the missing customer mapping
+          await safeUpsert('stripe_customers', {
+            customer_id: customerId,
+            user_id: userId,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'customer_id' });
           
           // Update customer metadata for future reference
           try {
@@ -224,23 +253,8 @@ async function findUserIdForCustomer(customerId: string, stripeData: any): Promi
         }
       }
     }
-  } catch (stripeError) {
-    console.warn(`⚠️  Failed to fetch customer from Stripe:`, stripeError);
-  }
-
-  // Method 5: Check our database for existing mapping
-  const customerResult = await safeSelect('stripe_customers', 
-    supabase
-      .from('stripe_customers')
-      .select('user_id')
-      .eq('customer_id', customerId)
-      .maybeSingle()
-  );
-
-  if (customerResult.data?.user_id) {
-    userId = customerResult.data.user_id;
-    console.log(`📋 Found user_id in database mapping: ${userId}`);
-    return userId;
+  } catch (emailLookupError) {
+    console.warn(`⚠️  Email lookup failed:`, emailLookupError);
   }
 
   console.log(`❌ Could not find user_id for customer: ${customerId}`);
