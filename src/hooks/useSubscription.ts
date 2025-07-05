@@ -34,48 +34,32 @@ export const useSubscription = () => {
         setLoading(true);
         setError(null);
 
-        // First check if user has any plan at all
-        const { data: userPlan, error: planError } = await supabase
-          .from('user_plans')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
-
-        if (planError) {
-          console.error('Error fetching user plan:', planError);
-        }
-
-        // If no plan exists, create a free plan (fallback safety)
-        if (!userPlan) {
-          console.log('🆓 No user plan found, creating free plan for user:', user.id);
-          const { error: createPlanError } = await supabase
-            .from('user_plans')
-            .insert({
-              user_id: user.id,
-              plan_type: 'free',
-              status: 'active',
-              plan_started_at: new Date().toISOString(),
-              plan_updated_at: new Date().toISOString()
-            });
-
-          if (createPlanError) {
-            console.error('Failed to create fallback free plan:', createPlanError);
-          } else {
-            console.log('✅ Created fallback free plan for user:', user.id);
-          }
-        }
+        // Ensure user has a plan - create free plan if none exists
+        await ensureUserHasPlan(user.id);
 
         // Now fetch subscription data
-        const { data, error: fetchError } = await supabase
-          .from('stripe_user_subscriptions')
-          .select('*')
-          .limit(1)
-          .maybeSingle();
+        let data = null;
+        let fetchError = null;
+        
+        try {
+          const result = await supabase
+            .from('stripe_user_subscriptions')
+            .select('*')
+            .limit(1)
+            .maybeSingle();
+          
+          data = result.data;
+          fetchError = result.error;
+        } catch (networkError) {
+          console.warn('Network error fetching subscription, using fallback:', networkError);
+          // On network error, user still has free plan, so continue
+          fetchError = null;
+          data = null;
+        }
 
         if (fetchError) {
-          console.error('Error fetching subscription:', fetchError);
-          setError('Failed to fetch subscription data');
-          return;
+          console.warn('Error fetching subscription (non-critical):', fetchError);
+          // Don't set error state - user still has free plan
         }
 
         if (data) {
@@ -90,8 +74,9 @@ export const useSubscription = () => {
           setSubscription(null);
         }
       } catch (err) {
-        console.error('Unexpected error fetching subscription:', err);
-        setError('An unexpected error occurred');
+        console.warn('Unexpected error fetching subscription (non-critical):', err);
+        // Don't set error state - ensure user still has access
+        setSubscription(null);
       } finally {
         setLoading(false);
       }
@@ -99,6 +84,68 @@ export const useSubscription = () => {
 
     fetchSubscription();
   }, [user]);
+
+  // Helper function to ensure user has a plan
+  const ensureUserHasPlan = async (userId: string) => {
+    try {
+      // Check if user has any plan
+      const { data: existingPlan, error: checkError } = await supabase
+        .from('user_plans')
+        .select('id, plan_type, status')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.warn('Error checking user plan:', checkError);
+        // Continue anyway - better to have duplicate than no plan
+      }
+
+      if (!existingPlan) {
+        console.log('🆓 Creating free plan for user:', userId);
+        
+        const { error: createError } = await supabase
+          .from('user_plans')
+          .insert({
+            user_id: userId,
+            plan_type: 'free',
+            status: 'active',
+            plan_started_at: new Date().toISOString(),
+            plan_updated_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+
+        if (createError) {
+          console.warn('Failed to create free plan (non-critical):', createError);
+          // Try upsert as fallback
+          const { error: upsertError } = await supabase
+            .from('user_plans')
+            .upsert({
+              user_id: userId,
+              plan_type: 'free',
+              status: 'active',
+              plan_started_at: new Date().toISOString(),
+              plan_updated_at: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'user_id' });
+          
+          if (upsertError) {
+            console.warn('Upsert also failed (non-critical):', upsertError);
+          } else {
+            console.log('✅ Created free plan via upsert for user:', userId);
+          }
+        } else {
+          console.log('✅ Created free plan for user:', userId);
+        }
+      } else {
+        console.log('✅ User already has plan:', existingPlan.plan_type, existingPlan.status);
+      }
+    } catch (err) {
+      console.warn('Exception ensuring user plan (non-critical):', err);
+      // Don't throw - better to continue with potential missing plan than crash
+    }
+  };
 
   const hasActiveSubscription = () => {
     // Check both subscription status and user plan type

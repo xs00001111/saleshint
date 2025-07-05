@@ -10,12 +10,28 @@ console.log('🔍 Supabase Environment Check:', {
   NODE_ENV: import.meta.env.MODE
 });
 
+// Validate Supabase URL format
+function isValidSupabaseUrl(url: string): boolean {
+  try {
+    const parsedUrl = new URL(url);
+    // Check if it's a valid HTTPS URL and looks like a Supabase URL
+    return parsedUrl.protocol === 'https:' && 
+           parsedUrl.hostname.includes('supabase') &&
+           parsedUrl.hostname.endsWith('.co');
+  } catch {
+    return false;
+  }
+}
+
 let supabase: any;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('❌ Missing Supabase environment variables:', {
-    VITE_SUPABASE_URL: supabaseUrl ? 'Set' : 'Missing',
-    VITE_SUPABASE_ANON_KEY: supabaseAnonKey ? 'Set' : 'Missing'
+const hasValidUrl = supabaseUrl && isValidSupabaseUrl(supabaseUrl);
+const hasValidKey = supabaseAnonKey && supabaseAnonKey.length > 10;
+
+if (!hasValidUrl || !hasValidKey) {
+  console.error('❌ Invalid Supabase configuration:', {
+    VITE_SUPABASE_URL: supabaseUrl ? (hasValidUrl ? 'Valid' : 'Invalid format') : 'Missing',
+    VITE_SUPABASE_ANON_KEY: supabaseAnonKey ? (hasValidKey ? 'Valid' : 'Invalid format') : 'Missing'
   })
   
   // Create a mock client for development/demo purposes
@@ -23,8 +39,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
     auth: {
       getSession: () => Promise.resolve({ data: { session: null }, error: null }),
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-      signUp: () => Promise.resolve({ error: { message: 'Supabase not configured - please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables' } }),
-      signInWithPassword: () => Promise.resolve({ error: { message: 'Supabase not configured - please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables' } }),
+      signUp: () => Promise.resolve({ error: { message: 'Supabase not configured - please set valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables' } }),
+      signInWithPassword: () => Promise.resolve({ error: { message: 'Supabase not configured - please set valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables' } }),
       signOut: () => Promise.resolve({ error: null }),
       getUser: () => Promise.resolve({ data: { user: null }, error: { message: 'Supabase not configured' } }),
       resend: () => Promise.resolve({ error: { message: 'Supabase not configured' } })
