@@ -77,16 +77,35 @@ Deno.serve(async (req) => {
     console.log(`🔍 Creating checkout for user: ${user.id} (${user.email})`);
 
     // Check for existing customer mapping using service role to bypass RLS
-    const { data: customer, error: getCustomerError } = await supabase
-      .from('stripe_customers')
-      .select('customer_id')
-      .eq('user_id', user.id)
-      .is('deleted_at', null)
-      .maybeSingle();
+    let customer = null;
+    let getCustomerError = null;
+    
+    try {
+      const result = await supabase
+        .from('stripe_customers')
+        .select('customer_id')
+        .eq('user_id', user.id)
+        .is('deleted_at', null)
+        .maybeSingle();
+      
+      customer = result.data;
+      getCustomerError = result.error;
+      
+      console.log(`🔍 Customer lookup result:`, { 
+        found: !!customer, 
+        customer_id: customer?.customer_id,
+        error: getCustomerError?.message 
+      });
+    } catch (queryError) {
+      console.error('Exception during customer lookup:', queryError);
+      getCustomerError = queryError;
+    }
 
-    if (getCustomerError) {
+    if (getCustomerError && getCustomerError.code !== 'PGRST116') {
+      // PGRST116 is "no rows returned" which is fine - means no existing customer
       console.error('Failed to fetch customer information from the database:', getCustomerError);
-      return corsResponse({ error: 'Failed to fetch customer information' }, 500);
+      console.log('🔄 Proceeding without existing customer mapping due to error');
+      customer = null; // Treat as no existing customer
     }
 
     let customerId;
