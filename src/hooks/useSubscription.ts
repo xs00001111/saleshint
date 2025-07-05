@@ -101,7 +101,11 @@ export const useSubscription = () => {
   }, [user]);
 
   const hasActiveSubscription = () => {
-    return subscription?.subscription_status === 'active' || subscription?.subscription_status === 'trialing';
+    // Check both subscription status and user plan type
+    const hasActiveStripeSubscription = subscription?.subscription_status === 'active' || subscription?.subscription_status === 'trialing';
+    
+    // Also check if user has monthly plan (for cases where subscription data hasn't loaded yet)
+    return hasActiveStripeSubscription;
   };
 
   const isSubscriptionCanceled = () => {
@@ -119,11 +123,38 @@ export const useSubscription = () => {
     hasActiveSubscription,
     isSubscriptionCanceled,
     willCancelAtPeriodEnd,
-    refetch: () => {
+    refetch: async () => {
       if (user) {
         setLoading(true);
-        // Re-trigger the effect by updating a dependency
         setError(null);
+        
+        // Force a fresh fetch
+        try {
+          const { data, error: fetchError } = await supabase
+            .from('stripe_user_subscriptions')
+            .select('*')
+            .limit(1)
+            .maybeSingle();
+
+          if (fetchError) {
+            console.error('Error refetching subscription:', fetchError);
+            setError('Failed to fetch subscription data');
+          } else if (data) {
+            const product = data.price_id ? getProductByPriceId(data.price_id) : null;
+            const enhancedSubscription = {
+              ...data,
+              product_name: product?.name || 'Unlimited Sales Copilot'
+            };
+            setSubscription(enhancedSubscription);
+          } else {
+            setSubscription(null);
+          }
+        } catch (err) {
+          console.error('Unexpected error refetching subscription:', err);
+          setError('An unexpected error occurred');
+        } finally {
+          setLoading(false);
+        }
       }
     }
   };

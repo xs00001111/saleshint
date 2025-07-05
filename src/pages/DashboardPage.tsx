@@ -15,7 +15,8 @@ const DashboardPage: React.FC = () => {
   const [userPlan, setUserPlan] = useState<any>(null);
   const [planLoading, setPlanLoading] = useState(true);
 
-  const isFreePlan = !hasActiveSubscription();
+  // Check both subscription and user plan to determine if user has active plan
+  const isFreePlan = !hasActiveSubscription() && (!userPlan || userPlan.plan_type === 'free');
   const isEmailVerified = user?.email_confirmed_at;
 
   // Fetch user plan information
@@ -152,7 +153,7 @@ const DashboardPage: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                    {isFreePlan ? 'Free Trial' : 'Unlimited Sales Copilot'}
+                    {(userPlan?.plan_type === 'monthly' || hasActiveSubscription()) ? 'Unlimited Sales Copilot' : 'Free Trial'}
                   </h2>
                   {loading ? (
                     <div className="animate-pulse">
@@ -161,7 +162,9 @@ const DashboardPage: React.FC = () => {
                     </div>
                   ) : isFreePlan ? (
                     <div>
-                      <p className="text-gray-600">5 calls, 5 minutes each</p>
+                      <p className="text-gray-600">
+                        {userPlan?.plan_type === 'monthly' ? 'Monthly Plan • Unlimited Usage' : '5 calls, 5 minutes each'}
+                      </p>
                     </div>
                   ) : (
                     <div>
@@ -180,11 +183,13 @@ const DashboardPage: React.FC = () => {
               </div>
               <div className="text-right">
                 <div className={`inline-flex px-4 py-2 rounded-full text-sm font-medium ${
-                  isFreePlan 
+                  (userPlan?.plan_type === 'monthly' || hasActiveSubscription())
+                    ? 'bg-emerald-200 text-emerald-800'
+                    : isFreePlan 
                     ? 'bg-gray-200 text-gray-800' 
                     : 'bg-emerald-200 text-emerald-800'
                 }`}>
-                  {isFreePlan ? 'Free Trial' : 'Pro Plan'}
+                  {(userPlan?.plan_type === 'monthly' || hasActiveSubscription()) ? 'Pro Plan' : 'Free Trial'}
                 </div>
                 {!isFreePlan && subscription?.payment_method_last4 && (
                   <p className="text-sm text-gray-500 mt-2">
@@ -196,14 +201,14 @@ const DashboardPage: React.FC = () => {
           </div>
 
           {/* Pricing Section for Free Users - Exact same as landing page */}
-          {isFreePlan && (
+          {(isFreePlan && userPlan?.plan_type !== 'monthly') && (
             <div className="mb-8">
               <PricingSection />
             </div>
           )}
 
           {/* Pro Plan Success Message */}
-          {!isFreePlan && (
+          {(userPlan?.plan_type === 'monthly' || hasActiveSubscription()) && (
             <div className="bg-emerald-50 rounded-xl p-8 border border-emerald-200 text-center">
               <Crown className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-emerald-900 mb-2">

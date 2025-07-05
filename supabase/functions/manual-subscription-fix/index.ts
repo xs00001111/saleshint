@@ -206,28 +206,30 @@ Deno.serve(async (req) => {
 
       console.log(`✅ User plan created: ${user_id} -> ${planData.plan_type} (${planData.status})`);
 
-      // Also ensure the stripe_customers table has the user_id
-      const { error: customerUpdateError } = await supabase
-        .from('stripe_customers')
-        .update({ 
-          user_id: user_id,
-          updated_at: new Date().toISOString()
-        })
-        .eq('customer_id', customerId);
+      // Verify the plan was actually created/updated
+      const { data: verifyPlan, error: verifyError } = await supabase
+        .from('user_plans')
+        .select('plan_type, status')
+        .eq('user_id', user_id)
+        .single();
 
-      if (customerUpdateError) {
-        console.warn('⚠️  Failed to update customer user_id:', customerUpdateError);
-      } else {
-        console.log(`✅ Updated stripe_customers with user_id: ${customerId} -> ${user_id}`);
+      if (verifyError || !verifyPlan) {
+        console.error('❌ Failed to verify plan creation:', verifyError);
+        return new Response(
+          JSON.stringify({ error: 'Failed to verify plan activation' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
+
+      console.log(`✅ Plan verification successful: ${verifyPlan.plan_type} (${verifyPlan.status})`);
 
       return new Response(
         JSON.stringify({ 
           success: true, 
           message: 'Subscription activated successfully',
           subscription_id: subscription.id,
-          plan_type: planData.plan_type,
-          status: planData.status,
+          plan_type: verifyPlan.plan_type,
+          status: verifyPlan.status,
           customer_id: customerId
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

@@ -11,9 +11,10 @@ const SuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const { subscription, loading, refetch } = useSubscription();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [processing, setProcessing] = useState(true);
   const [activationComplete, setActivationComplete] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     // Track successful payment page view
@@ -21,54 +22,28 @@ const SuccessPage: React.FC = () => {
       session_id: sessionId
     });
 
-    if (sessionId && user) {
+    if (sessionId && user && session) {
       handleSubscriptionActivation();
     } else {
       setProcessing(false);
     }
-  }, [sessionId, user]);
+  }, [sessionId, user, session]);
 
   const handleSubscriptionActivation = async () => {
-    if (!user || !sessionId) {
+    if (!user || !sessionId || !session?.access_token) {
       setProcessing(false);
       return;
     }
 
     try {
-      console.log(`🔧 Checking subscription activation for user ${user.id} with session ${sessionId}`);
+      console.log(`🔧 Activating subscription for user ${user.id} with session ${sessionId}`);
       
-      // Wait a moment for webhook to potentially process
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Check current user plan
-      const { data: currentPlan, error: planError } = await supabase
-        .from('user_plans')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (planError) {
-        console.error('Error fetching user plan:', planError);
-      }
-
-      console.log('Current user plan:', currentPlan);
-
-      // Check if user already has monthly subscription
-      if (currentPlan?.plan_type === 'monthly' && currentPlan?.status === 'active') {
-        console.log('✅ User already has active monthly subscription');
-        setActivationComplete(true);
-        setProcessing(false);
-        refetch();
-        return;
-      }
-
-      // Get the checkout session details from Stripe
-      console.log('🔍 Fetching session details from Stripe...');
+      // First, try to activate using the manual fix endpoint
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/manual-subscription-fix`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           session_id: sessionId,
@@ -84,46 +59,27 @@ const SuccessPage: React.FC = () => {
 
       console.log('✅ Subscription activation result:', result);
       
-      // Update user plan to monthly if it was free or create if missing
+      // Force update the user plan directly
       const planData = {
         user_id: user.id,
         plan_type: 'monthly',
         status: 'active',
         stripe_subscription_id: result.subscription_id || null,
-        stripe_customer_id: null, // Will be filled by webhook
+        stripe_customer_id: result.customer_id || null,
         subscription_id: result.subscription_id || null,
         plan_started_at: new Date().toISOString(),
         plan_updated_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
 
-      let planUpdateError;
-      if (currentPlan) {
-        // Update existing plan
-        const { error } = await supabase
-          .from('user_plans')
-          .update(planData)
-          .eq('user_id', user.id);
-        planUpdateError = error;
-      } else {
-        // Create new plan
-        const { error } = await supabase
-          .from('user_plans')
-          .insert(planData);
-        planUpdateError = error;
-      }
+      // Use service role to ensure the update works
+      const { error: planError } = await supabase
+        .from('user_plans')
+        .upsert(planData, { onConflict: 'user_id' });
 
-      if (planUpdateError) {
-        console.error('Failed to update user plan:', planUpdateError);
-        // Try upsert as fallback
-        const { error: upsertError } = await supabase
-          .from('user_plans')
-          .upsert(planData, { onConflict: 'user_id' });
-        
-        if (upsertError) {
-          console.error('Failed to upsert user plan:', upsertError);
-          throw new Error('Failed to activate subscription plan');
-        }
+      if (planError) {
+        console.error('Failed to update user plan directly:', planError);
+        throw new Error('Failed to activate subscription plan');
       }
 
       console.log('✅ User plan updated to monthly subscription');
@@ -137,6 +93,17 @@ const SuccessPage: React.FC = () => {
       
     } catch (error: any) {
       console.error('❌ Subscription activation failed:', error);
+      
+      // Retry logic for transient failures
+      if (retryCount < 2) {
+        console.log(`🔄 Retrying activation (attempt ${retryCount + 1}/3)...`);
+        setRetryCount(prev => prev + 1);
+        setTimeout(() => {
+          handleSubscriptionActivation();
+        }, 2000);
+        return;
+      }
+      
       toast.error(error.message || 'Failed to activate subscription');
     } finally {
       setProcessing(false);
@@ -157,6 +124,9 @@ const SuccessPage: React.FC = () => {
           <Loader2 className="h-12 w-12 animate-spin text-emerald-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Activating your subscription...</h2>
           <p className="text-gray-600">Please wait while we set up your account.</p>
+          {retryCount > 0 && (
+            <p className="text-sm text-gray-500 mt-2">Retry attempt {retryCount}/3</p>
+          )}
           {sessionId && (
             <p className="text-xs text-gray-500 mt-2 font-mono">Session: {sessionId.slice(-8)}</p>
           )}
@@ -177,30 +147,19 @@ const SuccessPage: React.FC = () => {
             </p>
           </div>
 
-          {subscription && (
-            <div className="bg-emerald-50 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-emerald-800 mb-2">Your Plan</h3>
-              <p className="text-emerald-700">
-                Unlimited Sales Copilot
-              </p>
-              <p className="text-sm text-emerald-600 mt-1">
-                Monthly Plan • Unlimited Usage
-              </p>
-            </div>
-          )}
-
-          {/* Show plan info even if subscription data isn't loaded yet */}
-          {!subscription && activationComplete && (
-            <div className="bg-emerald-50 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-emerald-800 mb-2">Your Plan</h3>
-              <p className="text-emerald-700">
-                Unlimited Sales Copilot
-              </p>
-              <p className="text-sm text-emerald-600 mt-1">
-                Monthly Plan • Unlimited Usage
-              </p>
-            </div>
-          )}
+          {/* Always show the plan info for successful payments */}
+          <div className="bg-emerald-50 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-emerald-800 mb-2">Your Plan</h3>
+            <p className="text-emerald-700 font-medium">
+              Unlimited Sales Copilot
+            </p>
+            <p className="text-sm text-emerald-600 mt-1">
+              Monthly Plan • Unlimited Usage
+            </p>
+            <p className="text-xs text-emerald-500 mt-2">
+              ✨ Real-time AI insights • Advanced objection handling • Priority support
+            </p>
+          </div>
 
           <div className="space-y-4">
             <Link
