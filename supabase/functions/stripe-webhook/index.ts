@@ -481,8 +481,45 @@ async function syncCustomerFromStripe(customerId: string) {
     if (userId) {
       // Determine plan type and status based on subscription
       const hasActiveSubscription = current && ['active', 'trialing'].includes(current.status);
-      const planType = hasActiveSubscription ? 'monthly' : 'free';
-      const planStatus = hasActiveSubscription ? 'active' : 'inactive';
+      
+      // Check if user already has an optimistically activated plan
+      const { data: existingPlan } = await safeSelect('user_plans',
+        supabase
+          .from('user_plans')
+          .select('plan_type, status, plan_started_at')
+          .eq('user_id', userId)
+          .maybeSingle()
+      );
+      
+      let planType, planStatus;
+      
+      if (hasActiveSubscription) {
+        // Subscription is confirmed active - keep it active
+        planType = 'monthly';
+        planStatus = 'active';
+        console.log(`✅ Confirming active subscription for user: ${userId}`);
+      } else if (existingPlan?.plan_type === 'monthly' && existingPlan?.status === 'active') {
+        // User has optimistic activation but subscription failed - check timing
+        const planAge = new Date().getTime() - new Date(existingPlan.plan_started_at || 0).getTime();
+        const fiveMinutes = 5 * 60 * 1000;
+        
+        if (planAge < fiveMinutes) {
+          // Keep optimistic activation for a few minutes
+          planType = 'monthly';
+          planStatus = 'active';
+          console.log(`⏳ Keeping optimistic activation for user: ${userId} (${Math.round(planAge/1000)}s old)`);
+        } else {
+          // Too old, revert to free
+          planType = 'free';
+          planStatus = 'inactive';
+          console.log(`⏰ Reverting expired optimistic activation for user: ${userId}`);
+        }
+      } else {
+        // No active subscription and no optimistic activation
+        planType = 'free';
+        planStatus = 'inactive';
+        console.log(`❌ No active subscription found for user: ${userId}`);
+      }
       
       const planData = {
         user_id: userId,
@@ -491,7 +528,7 @@ async function syncCustomerFromStripe(customerId: string) {
         stripe_subscription_id: current?.id || null,
         stripe_customer_id: customerId,
         subscription_id: current?.id || null,
-        plan_updated_at: new Date().toISOString(),
+        plan_updated_at: hasActiveSubscription ? new Date().toISOString() : existingPlan?.plan_started_at || new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
       

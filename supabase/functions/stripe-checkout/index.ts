@@ -196,6 +196,38 @@ Deno.serve(async (req) => {
       }
     }
 
+    // 🚀 OPTIMISTIC ACTIVATION: Set user plan to active immediately for subscriptions
+    if (mode === 'subscription') {
+      console.log(`🚀 Optimistically activating subscription for user: ${user.id}`);
+      
+      const optimisticPlanData = {
+        user_id: user.id,
+        plan_type: 'monthly',
+        status: 'active',
+        stripe_subscription_id: null, // Will be updated by webhook
+        stripe_customer_id: customerId,
+        subscription_id: null, // Will be updated by webhook
+        plan_started_at: new Date().toISOString(),
+        plan_updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      // Use upsert to handle existing records
+      const { error: optimisticError } = await supabase
+        .from('user_plans')
+        .upsert(optimisticPlanData, { 
+          onConflict: 'user_id',
+          ignoreDuplicates: false 
+        });
+
+      if (optimisticError) {
+        console.warn('Failed to set optimistic plan activation:', optimisticError);
+        // Don't fail checkout for this - webhook will handle it
+      } else {
+        console.log(`✅ Optimistically activated plan for user: ${user.id}`);
+      }
+    }
+
     // create Checkout Session with user identification
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
