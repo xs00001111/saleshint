@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
 
     console.log(`🔍 Creating checkout for user: ${user.id} (${user.email})`);
 
-    // Check for existing customer mapping
+    // Check for existing customer mapping using service role to bypass RLS
     const { data: customer, error: getCustomerError } = await supabase
       .from('stripe_customers')
       .select('customer_id')
@@ -85,7 +85,7 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (getCustomerError) {
-      console.error('Failed to fetch customer information from the database', getCustomerError);
+      console.error('Failed to fetch customer information from the database:', getCustomerError);
       return corsResponse({ error: 'Failed to fetch customer information' }, 500);
     }
 
