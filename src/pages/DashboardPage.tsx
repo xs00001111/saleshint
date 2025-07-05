@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Crown, Home, AlertTriangle } from 'lucide-react';
+import { Crown, Home, AlertTriangle, Download } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSubscription } from '../hooks/useSubscription';
 import { Link } from 'react-router-dom';
 import Logo from '../components/Logo';
 import PricingSection from '../components/PricingSection';
 import EmailVerificationBanner from '../components/EmailVerificationBanner';
+import DownloadButtons from '../components/DownloadButtons';
 import { supabase } from '../lib/supabase';
 
 const DashboardPage: React.FC = () => {
@@ -307,23 +308,68 @@ const DashboardPage: React.FC = () => {
                 ✨ Unlimited calls • Advanced AI insights • Priority support • CRM integrations
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button 
-                  className={`btn ${
-                    isEmailVerified 
-                      ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                  disabled={!isEmailVerified}
-                >
-                  {isEmailVerified ? 'Start New Call' : 'Verify Email to Start'}
-                </button>
-                <button 
-                  className="btn bg-white text-emerald-800 border border-emerald-300 hover:bg-emerald-50"
-                  onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
-                >
-                  Manage Subscription
-                </button>
+                <DownloadButtons variant="page" className="mb-4" />
+                <div className="bg-white rounded-lg p-6 border border-emerald-200 max-w-2xl mx-auto">
+                  <h4 className="text-lg font-semibold text-emerald-900 mb-3">Subscription Management</h4>
+                  <div className="space-y-3 text-left">
+                    {subscription && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium text-gray-700">Status:</span>
+                          <span className="ml-2 text-emerald-600 capitalize">{subscription.subscription_status}</span>
+                        </div>
+                        {subscription.current_period_end && (
+                          <div>
+                            <span className="font-medium text-gray-700">
+                              {subscription.cancel_at_period_end ? 'Expires:' : 'Renews:'}
+                            </span>
+                            <span className="ml-2 text-gray-600">
+                              {new Date(subscription.current_period_end * 1000).toLocaleDateString()}
+                            </span>
+                          </div>
+                        )}
+                        {subscription.payment_method_last4 && (
+                          <div>
+                            <span className="font-medium text-gray-700">Payment:</span>
+                            <span className="ml-2 text-gray-600 capitalize">
+                              {subscription.payment_method_brand} •••• {subscription.payment_method_last4}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <span className="font-medium text-gray-700">Plan:</span>
+                          <span className="ml-2 text-gray-600">Monthly ($20/month)</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="pt-3 border-t border-gray-200">
+                      <p className="text-sm text-gray-600 mb-2">
+                        Questions about your subscription?
+                      </p>
+                      <a 
+                        href="mailto:founders@interm.ai"
+                        className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
+                      >
+                        Contact founders@interm.ai
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+          )}
+
+          {/* Free Plan Users - Show Download Button */}
+          {(isFreePlan && userPlan?.plan_type !== 'monthly') && (
+            <div className="bg-gray-50 rounded-xl p-8 border border-gray-200 text-center mb-8">
+              <Download className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Download SalesHint
+              </h3>
+              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                Get the desktop app to start using SalesHint during your sales calls.
+              </p>
+              <DownloadButtons variant="page" />
             </div>
           )}
         </div>
