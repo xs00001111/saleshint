@@ -181,10 +181,23 @@ const SuccessPage: React.FC = () => {
             <div className="bg-emerald-50 rounded-lg p-4 mb-6">
               <h3 className="font-semibold text-emerald-800 mb-2">Your Plan</h3>
               <p className="text-emerald-700">
-                {subscription.product_name || 'Unlimited Sales Copilot'}
+                Unlimited Sales Copilot
               </p>
               <p className="text-sm text-emerald-600 mt-1">
-                Status: {subscription.subscription_status}
+                Monthly Plan • Unlimited Usage
+              </p>
+            </div>
+          )}
+
+          {/* Show plan info even if subscription data isn't loaded yet */}
+          {!subscription && activationComplete && (
+            <div className="bg-emerald-50 rounded-lg p-4 mb-6">
+              <h3 className="font-semibold text-emerald-800 mb-2">Your Plan</h3>
+              <p className="text-emerald-700">
+                Unlimited Sales Copilot
+              </p>
+              <p className="text-sm text-emerald-600 mt-1">
+                Monthly Plan • Unlimited Usage
               </p>
             </div>
           )}

@@ -83,7 +83,7 @@ export const useSubscription = () => {
           const product = data.price_id ? getProductByPriceId(data.price_id) : null;
           const enhancedSubscription = {
             ...data,
-            product_name: product?.name || 'Unknown Product'
+            product_name: product?.name || 'Unlimited Sales Copilot'
           };
           setSubscription(enhancedSubscription);
         } else {

@@ -152,7 +152,7 @@ const DashboardPage: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                    {isFreePlan ? 'Free Trial' : subscription?.product_name || 'Unlimited Sales Copilot'}
+                    {isFreePlan ? 'Free Trial' : 'Unlimited Sales Copilot'}
                   </h2>
                   {loading ? (
                     <div className="animate-pulse">
@@ -161,12 +161,12 @@ const DashboardPage: React.FC = () => {
                     </div>
                   ) : isFreePlan ? (
                     <div>
-                      <p className="text-gray-600">5 calls each for 5 minutes</p>
+                      <p className="text-gray-600">5 calls, 5 minutes each</p>
                     </div>
                   ) : (
                     <div>
-                      <p className="text-lg font-medium text-emerald-600 mb-1 capitalize">
-                        Status: {subscription?.subscription_status?.replace('_', ' ')}
+                      <p className="text-lg font-medium text-emerald-600 mb-1">
+                        Monthly Plan • Unlimited Usage
                       </p>
                       {subscription?.current_period_end && (
                         <p className="text-sm text-gray-600">
@@ -209,9 +209,11 @@ const DashboardPage: React.FC = () => {
               <h3 className="text-2xl font-bold text-emerald-900 mb-2">
                 You're All Set!
               </h3>
-              <p className="text-emerald-700 mb-6 max-w-2xl mx-auto">
-                Your Pro plan is active and ready to help you close more deals. Start your next sales call 
-                and experience the power of AI-driven sales assistance.
+              <p className="text-emerald-700 mb-4 max-w-2xl mx-auto">
+                Your <strong>Unlimited Sales Copilot</strong> plan is active and ready to help you close more deals.
+              </p>
+              <p className="text-emerald-600 mb-6 text-sm">
+                ✨ Unlimited calls • Advanced AI insights • Priority support • CRM integrations
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
