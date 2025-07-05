@@ -28,19 +28,55 @@ const DashboardPage: React.FC = () => {
 
     const fetchUserPlan = async () => {
       try {
-        const { data, error } = await supabase
-          .from('user_plans')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
+        // First ensure user has a plan
+        await ensureUserHasPlan(user.id);
+        
+        // Then fetch the plan
+        let data = null;
+        let error = null;
+        
+        try {
+          const result = await supabase
+            .from('user_plans')
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle();
+          
+          data = result.data;
+          error = result.error;
+        } catch (networkError) {
+          console.warn('Network error fetching user plan, using fallback:', networkError);
+          // Create a fallback free plan object
+          data = {
+            user_id: user.id,
+            plan_type: 'free',
+            status: 'active',
+            plan_started_at: new Date().toISOString()
+          };
+          error = null;
+        }
 
         if (error) {
-          console.error('Error fetching user plan:', error);
+          console.warn('Error fetching user plan (using fallback):', error);
+          // Use fallback free plan
+          data = {
+            user_id: user.id,
+            plan_type: 'free',
+            status: 'active',
+            plan_started_at: new Date().toISOString()
+          };
         } else {
           setUserPlan(data);
         }
       } catch (err) {
-        console.error('Unexpected error fetching user plan:', err);
+        console.warn('Unexpected error fetching user plan (using fallback):', err);
+        // Use fallback free plan
+        setUserPlan({
+          user_id: user.id,
+          plan_type: 'free',
+          status: 'active',
+          plan_started_at: new Date().toISOString()
+        });
       } finally {
         setPlanLoading(false);
       }
@@ -48,6 +84,45 @@ const DashboardPage: React.FC = () => {
 
     fetchUserPlan();
   }, [user]);
+
+  // Helper function to ensure user has a plan
+  const ensureUserHasPlan = async (userId: string) => {
+    try {
+      const { data: existingPlan, error: checkError } = await supabase
+        .from('user_plans')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.warn('Error checking user plan:', checkError);
+      }
+
+      if (!existingPlan) {
+        console.log('🆓 Creating free plan for user in dashboard:', userId);
+        
+        const { error: createError } = await supabase
+          .from('user_plans')
+          .insert({
+            user_id: userId,
+            plan_type: 'free',
+            status: 'active',
+            plan_started_at: new Date().toISOString(),
+            plan_updated_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+
+        if (createError) {
+          console.warn('Failed to create free plan in dashboard:', createError);
+        } else {
+          console.log('✅ Created free plan in dashboard for user:', userId);
+        }
+      }
+    } catch (err) {
+      console.warn('Exception ensuring user plan in dashboard:', err);
+    }
+  };
 
   // Show loading state while fetching data
   if (planLoading || loading) {
