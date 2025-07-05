@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Crown, Home, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSubscription } from '../hooks/useSubscription';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../components/Logo';
 import PricingSection from '../components/PricingSection';
 import EmailVerificationBanner from '../components/EmailVerificationBanner';
+import { supabase } from '../lib/supabase';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
