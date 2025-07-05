@@ -39,6 +39,17 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Verify the user exists in our auth system
+    const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(user_id);
+    
+    if (authError || !authUser.user) {
+      console.error('Invalid user_id provided:', user_id, authError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid user_id' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     console.log(`🔧 Manual subscription fix for session: ${session_id}, user: ${user_id}`);
 
     // First, ensure we have the customer mapping
