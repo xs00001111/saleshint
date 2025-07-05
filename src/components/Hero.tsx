@@ -5,10 +5,10 @@ import DownloadButtons from './DownloadButtons';
 
 const Hero = () => {
   return (
-    <section className="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
+    <section className="pt-20 pb-16 md:pt-24 md:pb-24 overflow-hidden">
       <div className="container-custom">
-        <div className="flex flex-col lg:flex-row items-center">
-          <div className="w-full lg:w-1/2 mb-12 lg:mb-0 fade-in">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center">
+          <div className="w-full lg:w-1/2 mb-12 lg:mb-0 lg:pr-8 fade-in">
             <div className="inline-flex items-center px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full mb-6">
               <Sparkles className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">AI Sales Assistant</span>
@@ -47,7 +47,7 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="w-full lg:w-1/2 slide-in">
+          <div className="w-full lg:w-1/2 lg:pl-8 slide-in">
             <DemoPreview />
           </div>
         </div>
