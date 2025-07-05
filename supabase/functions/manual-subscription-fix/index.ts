@@ -41,6 +41,13 @@ Deno.serve(async (req) => {
 
     console.log(`🔧 Manual subscription fix for session: ${session_id}, user: ${user_id}`);
 
+    // First, ensure we have the customer mapping
+    const { data: existingCustomer } = await supabase
+      .from('stripe_customers')
+      .select('customer_id')
+      .eq('user_id', user_id)
+      .maybeSingle();
+
     // 1. Get the checkout session from Stripe
     let session;
     try {
@@ -65,6 +72,19 @@ Deno.serve(async (req) => {
     }
 
     const customerId = session.customer;
+
+    // Update Stripe customer metadata to ensure user ID is linked
+    try {
+      await stripe.customers.update(customerId, {
+        metadata: {
+          supabase_user_id: user_id,
+          user_email: session.customer_details?.email || ''
+        }
+      });
+      console.log(`✅ Updated Stripe customer metadata for ${customerId}`);
+    } catch (metadataError) {
+      console.warn('⚠️  Failed to update customer metadata:', metadataError);
+    }
 
     // 2. Ensure stripe_customers mapping exists
     console.log(`🔄 Ensuring customer mapping exists for ${customerId} -> ${user_id}`);
@@ -175,13 +195,29 @@ Deno.serve(async (req) => {
 
       console.log(`✅ User plan created: ${user_id} -> ${planData.plan_type} (${planData.status})`);
 
+      // Also ensure the stripe_customers table has the user_id
+      const { error: customerUpdateError } = await supabase
+        .from('stripe_customers')
+        .update({ 
+          user_id: user_id,
+          updated_at: new Date().toISOString()
+        })
+        .eq('customer_id', customerId);
+
+      if (customerUpdateError) {
+        console.warn('⚠️  Failed to update customer user_id:', customerUpdateError);
+      } else {
+        console.log(`✅ Updated stripe_customers with user_id: ${customerId} -> ${user_id}`);
+      }
+
       return new Response(
         JSON.stringify({ 
           success: true, 
           message: 'Subscription activated successfully',
           subscription_id: subscription.id,
           plan_type: planData.plan_type,
-          status: planData.status
+          status: planData.status,
+          customer_id: customerId
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -219,11 +255,25 @@ Deno.serve(async (req) => {
 
       console.log(`✅ Order record created for session: ${session_id}`);
 
+      // Ensure customer mapping for one-time payments too
+      const { error: customerUpdateError } = await supabase
+        .from('stripe_customers')
+        .update({ 
+          user_id: user_id,
+          updated_at: new Date().toISOString()
+        })
+        .eq('customer_id', customerId);
+
+      if (customerUpdateError) {
+        console.warn('⚠️  Failed to update customer user_id for order:', customerUpdateError);
+      }
+
       return new Response(
         JSON.stringify({ 
           success: true, 
           message: 'One-time payment processed successfully',
-          order_id: orderData.checkout_session_id
+          order_id: orderData.checkout_session_id,
+          customer_id: customerId
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
