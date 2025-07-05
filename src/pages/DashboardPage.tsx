@@ -103,7 +103,7 @@ const DashboardPage: React.FC = () => {
         
         const { error: createError } = await supabase
           .from('user_plans')
-          .insert({
+          .upsert({
             user_id: userId,
             plan_type: 'free',
             status: 'active',
@@ -111,12 +111,15 @@ const DashboardPage: React.FC = () => {
             plan_updated_at: new Date().toISOString(),
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
+          }, { 
+            onConflict: 'user_id',
+            ignoreDuplicates: false 
           });
 
         if (createError) {
           console.warn('Failed to create free plan in dashboard:', createError);
         } else {
-          console.log('✅ Created free plan in dashboard for user:', userId);
+          console.log('✅ Ensured free plan exists in dashboard for user:', userId);
         }
       }
     } catch (err) {

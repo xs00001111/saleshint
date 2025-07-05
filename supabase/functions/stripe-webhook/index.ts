@@ -549,8 +549,12 @@ async function syncCustomerFromStripe(customerId: string) {
       console.log(`👤 Setting user plan: ${planType} (${planStatus}) for user ${userId}`);
 
       // Try multiple approaches to save user plan
-      await safeUpsert('user_plans', planData, { onConflict: 'user_id' });
-      await safeInsert('user_plans', planData); // Backup insert
+      const upsertResult = await safeUpsert('user_plans', planData, { onConflict: 'user_id' });
+      
+      if (!upsertResult.success) {
+        // If upsert fails, try a direct update
+        await safeUpdate('user_plans', planData, { user_id: userId });
+      }
       
       console.log(`👤 ✅ Updated user plan for: ${userId} -> ${planData.plan_type} (${planData.status})`);
     } else {

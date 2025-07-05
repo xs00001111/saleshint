@@ -105,7 +105,7 @@ export const useSubscription = () => {
         
         const { error: createError } = await supabase
           .from('user_plans')
-          .insert({
+          .upsert({
             user_id: userId,
             plan_type: 'free',
             status: 'active',
@@ -113,30 +113,15 @@ export const useSubscription = () => {
             plan_updated_at: new Date().toISOString(),
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
+          }, { 
+            onConflict: 'user_id',
+            ignoreDuplicates: false 
           });
 
         if (createError) {
           console.warn('Failed to create free plan (non-critical):', createError);
-          // Try upsert as fallback
-          const { error: upsertError } = await supabase
-            .from('user_plans')
-            .upsert({
-              user_id: userId,
-              plan_type: 'free',
-              status: 'active',
-              plan_started_at: new Date().toISOString(),
-              plan_updated_at: new Date().toISOString(),
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }, { onConflict: 'user_id' });
-          
-          if (upsertError) {
-            console.warn('Upsert also failed (non-critical):', upsertError);
-          } else {
-            console.log('✅ Created free plan via upsert for user:', userId);
-          }
         } else {
-          console.log('✅ Created free plan for user:', userId);
+          console.log('✅ Ensured free plan exists for user:', userId);
         }
       } else {
         console.log('✅ User already has plan:', existingPlan.plan_type, existingPlan.status);
