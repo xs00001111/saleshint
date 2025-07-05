@@ -9,11 +9,55 @@ import EmailVerificationBanner from '../components/EmailVerificationBanner';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
-  const { subscription, loading, hasActiveSubscription } = useSubscription();
+  const { subscription, loading, hasActiveSubscription, error } = useSubscription();
   const [showVerificationBanner, setShowVerificationBanner] = useState(true);
+  const [userPlan, setUserPlan] = useState<any>(null);
+  const [planLoading, setPlanLoading] = useState(true);
 
   const isFreePlan = !hasActiveSubscription();
   const isEmailVerified = user?.email_confirmed_at;
+
+  // Fetch user plan information
+  useEffect(() => {
+    if (!user) {
+      setPlanLoading(false);
+      return;
+    }
+
+    const fetchUserPlan = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('user_plans')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error('Error fetching user plan:', error);
+        } else {
+          setUserPlan(data);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching user plan:', err);
+      } finally {
+        setPlanLoading(false);
+      }
+    };
+
+    fetchUserPlan();
+  }, [user]);
+
+  // Show loading state while fetching data
+  if (planLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-900">Loading your dashboard...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50">

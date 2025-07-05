@@ -79,6 +79,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Track sign up attempt
     if (!error) {
       analytics.trackSignUp('email');
+      
+      // Note: Free plan creation is handled automatically by database trigger
+      // No need to manually create user plan here
     }
     
     return { error }

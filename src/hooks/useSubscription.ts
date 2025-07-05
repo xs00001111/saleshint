@@ -34,6 +34,38 @@ export const useSubscription = () => {
         setLoading(true);
         setError(null);
 
+        // First check if user has any plan at all
+        const { data: userPlan, error: planError } = await supabase
+          .from('user_plans')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (planError) {
+          console.error('Error fetching user plan:', planError);
+        }
+
+        // If no plan exists, create a free plan (fallback safety)
+        if (!userPlan) {
+          console.log('🆓 No user plan found, creating free plan for user:', user.id);
+          const { error: createPlanError } = await supabase
+            .from('user_plans')
+            .insert({
+              user_id: user.id,
+              plan_type: 'free',
+              status: 'active',
+              plan_started_at: new Date().toISOString(),
+              plan_updated_at: new Date().toISOString()
+            });
+
+          if (createPlanError) {
+            console.error('Failed to create fallback free plan:', createPlanError);
+          } else {
+            console.log('✅ Created fallback free plan for user:', user.id);
+          }
+        }
+
+        // Now fetch subscription data
         const { data, error: fetchError } = await supabase
           .from('stripe_user_subscriptions')
           .select('*')
