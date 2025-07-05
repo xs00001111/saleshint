@@ -21,7 +21,9 @@ const DashboardPage: React.FC = () => {
 
   // Fetch user plan information
   useEffect(() => {
+    // Don't fetch user plan if no user is signed in
     if (!user) {
+      setUserPlan(null);
       setPlanLoading(false);
       return;
     }
@@ -87,6 +89,12 @@ const DashboardPage: React.FC = () => {
 
   // Helper function to ensure user has a plan
   const ensureUserHasPlan = async (userId: string) => {
+    // Validate user ID
+    if (!userId) {
+      console.warn('No user ID provided to ensureUserHasPlan');
+      return;
+    }
+
     try {
       const { data: existingPlan, error: checkError } = await supabase
         .from('user_plans')

@@ -23,8 +23,10 @@ export const useSubscription = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+    // Don't fetch anything if user is not signed in
     if (!user) {
       setSubscription(null);
+      setError(null);
       setLoading(false);
       return;
     }
@@ -87,6 +89,12 @@ export const useSubscription = () => {
 
   // Helper function to ensure user has a plan
   const ensureUserHasPlan = async (userId: string) => {
+    // Double-check user exists before proceeding
+    if (!userId) {
+      console.warn('No user ID provided to ensureUserHasPlan');
+      return;
+    }
+
     try {
       // Check if user has any plan
       const { data: existingPlan, error: checkError } = await supabase
@@ -133,6 +141,9 @@ export const useSubscription = () => {
   };
 
   const hasActiveSubscription = () => {
+    // Return false if no user is signed in
+    if (!user) return false;
+    
     // Check both subscription status and user plan type
     const hasActiveStripeSubscription = subscription?.subscription_status === 'active' || subscription?.subscription_status === 'trialing';
     
@@ -141,10 +152,12 @@ export const useSubscription = () => {
   };
 
   const isSubscriptionCanceled = () => {
+    if (!user) return false;
     return subscription?.subscription_status === 'canceled';
   };
 
   const willCancelAtPeriodEnd = () => {
+    if (!user) return false;
     return subscription?.cancel_at_period_end === true;
   };
 
@@ -156,6 +169,7 @@ export const useSubscription = () => {
     isSubscriptionCanceled,
     willCancelAtPeriodEnd,
     refetch: async () => {
+      // Don't refetch if no user is signed in
       if (user) {
         setLoading(true);
         setError(null);
@@ -187,6 +201,11 @@ export const useSubscription = () => {
         } finally {
           setLoading(false);
         }
+      } else {
+        // Reset state when no user
+        setSubscription(null);
+        setError(null);
+        setLoading(false);
       }
     }
   };
