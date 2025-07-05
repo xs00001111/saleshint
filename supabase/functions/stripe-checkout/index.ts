@@ -76,6 +76,7 @@ Deno.serve(async (req) => {
 
     console.log(`🔍 Creating checkout for user: ${user.id} (${user.email})`);
 
+    // Try to get existing customer, but don't fail if none exists
     const { data: customer, error: getCustomerError } = await supabase
       .from('stripe_customers')
       .select('customer_id')
@@ -83,9 +84,10 @@ Deno.serve(async (req) => {
       .is('deleted_at', null)
       .maybeSingle();
 
-    if (getCustomerError) {
-      console.error('Failed to fetch customer information from the database', getCustomerError);
-      return corsResponse({ error: 'Failed to fetch customer information' }, 500);
+    // Only fail if there's a real database error, not if no customer exists
+    if (getCustomerError && getCustomerError.code !== 'PGRST116') {
+      console.error('Database error fetching customer information:', getCustomerError);
+      return corsResponse({ error: 'Database error occurred' }, 500);
     }
 
     let customerId;
