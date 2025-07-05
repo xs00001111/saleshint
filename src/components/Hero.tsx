@@ -8,13 +8,13 @@ const Hero = () => {
     <section className="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
       <div className="container-custom">
         <div className="flex flex-col lg:flex-row items-center">
-          <div className="w-full lg:w-1/2 mb-12 lg:mb-0 fade-in lg:flex lg:flex-col lg:justify-start">
+          <div className="w-full lg:w-1/2 mb-12 lg:mb-0 fade-in">
             <div className="inline-flex items-center px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full mb-6">
               <Sparkles className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">AI Sales Assistant</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight lg:mt-0">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               Sell Smarter with <span className="text-green-900">AI</span>
             </h1>
             
@@ -47,7 +47,7 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="w-full lg:w-1/2 slide-in lg:flex lg:items-start">
+          <div className="w-full lg:w-1/2 slide-in">
             <DemoPreview />
           </div>
         </div>
