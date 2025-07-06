@@ -27,6 +27,9 @@ import AIPipelineInsightsPage from './pages/AIPipelineInsightsPage';
 import SalesConversationAnalysisPage from './pages/SalesConversationAnalysisPage';
 import AISalesHintsPage from './pages/AISalesHintsPage';
 import BestAIForSalesTeamsPage from './pages/BestAIForSalesTeamsPage';
+import HowToImproveSalesWithAIPage from './pages/HowToImproveSalesWithAIPage';
+import RealTimeAISalesGuidancePage from './pages/RealTimeAISalesGuidancePage';
+import BoostSDRPerformancePage from './pages/BoostSDRPerformancePage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -101,6 +104,11 @@ function App() {
             <Route path="/sales-conversation-analysis" element={<SalesConversationAnalysisPage />} />
             <Route path="/ai-sales-hints" element={<AISalesHintsPage />} />
             <Route path="/best-ai-for-sales-teams" element={<BestAIForSalesTeamsPage />} />
+            
+            {/* Final Sales SEO Pages */}
+            <Route path="/how-to-improve-sales-with-ai" element={<HowToImproveSalesWithAIPage />} />
+            <Route path="/real-time-ai-sales-guidance" element={<RealTimeAISalesGuidancePage />} />
+            <Route path="/boost-sdr-performance" element={<BoostSDRPerformancePage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>

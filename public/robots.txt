@@ -37,3 +37,6 @@ Allow: /ai-pipeline-insights
 Allow: /sales-conversation-analysis
 Allow: /ai-sales-hints
 Allow: /best-ai-for-sales-teams
+Allow: /how-to-improve-sales-with-ai
+Allow: /real-time-ai-sales-guidance
+Allow: /boost-sdr-performance
