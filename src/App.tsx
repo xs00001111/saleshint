@@ -10,12 +10,6 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import SuccessPage from './pages/SuccessPage';
 import DashboardPage from './pages/DashboardPage';
-import ObjectionHandlingPage from './pages/ObjectionHandlingPage';
-import PersuasiveInsightPage from './pages/PersuasiveInsightPage';
-import SalesCallPage from './pages/SalesCallPage';
-import SalesCopilotPage from './pages/SalesCopilotPage';
-import AISalesCopilotPage from './pages/AISalesCopilotPage';
-import FreeSalesCopilotPage from './pages/FreeSalesCopilotPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -57,12 +51,6 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/success" element={<SuccessPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/objection-handling" element={<ObjectionHandlingPage />} />
-            <Route path="/persuasive-insight" element={<PersuasiveInsightPage />} />
-            <Route path="/sales-call" element={<SalesCallPage />} />
-            <Route path="/sales-copilot" element={<SalesCopilotPage />} />
-            <Route path="/ai-sales-copilot" element={<AISalesCopilotPage />} />
-            <Route path="/free-sales-copilot" element={<FreeSalesCopilotPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>
