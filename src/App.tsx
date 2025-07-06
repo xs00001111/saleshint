@@ -23,6 +23,10 @@ import AIForOutboundSalesPage from './pages/AIForOutboundSalesPage';
 import CRMSalesIntelligencePage from './pages/CRMSalesIntelligencePage';
 import SalesProductivityToolPage from './pages/SalesProductivityToolPage';
 import EmailAssistantForSalesPage from './pages/EmailAssistantForSalesPage';
+import AIPipelineInsightsPage from './pages/AIPipelineInsightsPage';
+import SalesConversationAnalysisPage from './pages/SalesConversationAnalysisPage';
+import AISalesHintsPage from './pages/AISalesHintsPage';
+import BestAIForSalesTeamsPage from './pages/BestAIForSalesTeamsPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -93,6 +97,10 @@ function App() {
             <Route path="/crm-sales-intelligence" element={<CRMSalesIntelligencePage />} />
             <Route path="/sales-productivity-tool" element={<SalesProductivityToolPage />} />
             <Route path="/email-assistant-for-sales" element={<EmailAssistantForSalesPage />} />
+            <Route path="/ai-pipeline-insights" element={<AIPipelineInsightsPage />} />
+            <Route path="/sales-conversation-analysis" element={<SalesConversationAnalysisPage />} />
+            <Route path="/ai-sales-hints" element={<AISalesHintsPage />} />
+            <Route path="/best-ai-for-sales-teams" element={<BestAIForSalesTeamsPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>

@@ -33,3 +33,7 @@ Allow: /ai-for-outbound-sales
 Allow: /crm-sales-intelligence
 Allow: /sales-productivity-tool
 Allow: /email-assistant-for-sales
+Allow: /ai-pipeline-insights
+Allow: /sales-conversation-analysis
+Allow: /ai-sales-hints
+Allow: /best-ai-for-sales-teams
