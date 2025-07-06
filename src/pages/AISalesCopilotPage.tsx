@@ -49,7 +49,7 @@ const AISalesCopilotPage: React.FC = () => {
                 Our AI sales copilot represents the cutting edge of artificial intelligence applied to sales. Unlike basic chatbots or simple automation tools, our AI understands context, emotion, and sales psychology to provide truly intelligent assistance that adapts to your unique selling style and customer needs.
               </p>
               <p className="mb-6">
-                Built on advanced machine learning models trained on millions of successful <Link to="/sales-call" className="text-emerald-600 hover:text-emerald-700 font-medium">sales calls</Link>, our AI provides sophisticated <Link to="/objection-handling" className="text-emerald-600 hover:text-emerald-700 font-medium">objection handling</Link>, deep <Link to="/persuasive-insight" className="text-emerald-600 hover:text-emerald-700 font-medium">persuasive insights</Link>, and strategic guidance that feels like having a world-class sales coach available 24/7.
+                Built on advanced machine learning models trained on millions of successful <Link to="/sales-call" className="text-emerald-600 hover:text-emerald-700 font-medium">sales calls</Link>, our AI provides sophisticated <Link to="/objection-handling" className=\"text-emerald-600 hover:text-emerald-700 font-medium">objection handling</Link>, deep <Link to="/persuasive-insight" className=\"text-emerald-600 hover:text-emerald-700 font-medium">persuasive insights</Link>, and strategic guidance that feels like having a world-class sales coach available 24/7.
               </p>
             </div>
           </div>
