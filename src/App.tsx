@@ -10,6 +10,11 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import SuccessPage from './pages/SuccessPage';
 import DashboardPage from './pages/DashboardPage';
+import RealTimeConversationGuidancePage from './pages/RealTimeConversationGuidancePage';
+import AITeleprompterPage from './pages/AITeleprompterPage';
+import DesktopAssistantPage from './pages/DesktopAssistantPage';
+import ConversationAssistantPage from './pages/ConversationAssistantPage';
+import LiveAITranscriptionPage from './pages/LiveAITranscriptionPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -51,6 +56,23 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/success" element={<SuccessPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            
+            {/* SEO Landing Pages */}
+            <Route path="/real-time-conversation-guidance" element={<RealTimeConversationGuidancePage />} />
+            <Route path="/ai-teleprompter" element={<AITeleprompterPage />} />
+            <Route path="/magical-teleprompter" element={<AITeleprompterPage />} />
+            <Route path="/undetectable-ai" element={<AITeleprompterPage />} />
+            <Route path="/desktop-assistant" element={<DesktopAssistantPage />} />
+            <Route path="/ai-desktop-assistant" element={<DesktopAssistantPage />} />
+            <Route path="/desktop-assistant-ai" element={<DesktopAssistantPage />} />
+            <Route path="/conversation-assistant" element={<ConversationAssistantPage />} />
+            <Route path="/ai-conversation-assistant" element={<ConversationAssistantPage />} />
+            <Route path="/cursor-for-conversations" element={<ConversationAssistantPage />} />
+            <Route path="/live-ai-transcription" element={<LiveAITranscriptionPage />} />
+            <Route path="/real-time-support" element={<RealTimeConversationGuidancePage />} />
+            <Route path="/power-your-meetings" element={<LiveAITranscriptionPage />} />
+            <Route path="/real-time-ai-coaching" element={<RealTimeConversationGuidancePage />} />
+            <Route path="/ai-for-meeting" element={<LiveAITranscriptionPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>

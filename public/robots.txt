@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://saleshint.com/sitemap.xml
+
+# Disallow admin and private pages
+Disallow: /dashboard
+Disallow: /success
+Disallow: /admin
+
+# Allow SEO pages
+Allow: /real-time-conversation-guidance
+Allow: /ai-teleprompter
+Allow: /magical-teleprompter
+Allow: /undetectable-ai
+Allow: /desktop-assistant
+Allow: /ai-desktop-assistant
+Allow: /desktop-assistant-ai
+Allow: /conversation-assistant
+Allow: /ai-conversation-assistant
+Allow: /cursor-for-conversations
+Allow: /live-ai-transcription
+Allow: /real-time-support
+Allow: /power-your-meetings
+Allow: /real-time-ai-coaching
+Allow: /ai-for-meeting
