@@ -29,3 +29,7 @@ Allow: /ai-sales-assistant
 Allow: /sales-enablement-tool
 Allow: /real-time-sales-coaching
 Allow: /ai-sales-copilot
+Allow: /ai-for-outbound-sales
+Allow: /crm-sales-intelligence
+Allow: /sales-productivity-tool
+Allow: /email-assistant-for-sales
