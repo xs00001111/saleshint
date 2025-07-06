@@ -45,7 +45,7 @@ const SalesCopilotPage: React.FC = () => {
                 A sales copilot is an AI-powered assistant that works alongside sales professionals to enhance their performance, provide real-time guidance, and optimize every customer interaction. Think of it as having an expert sales coach, data analyst, and conversation strategist all rolled into one intelligent system.
               </p>
               <p className="mb-6">
-                Unlike traditional sales tools that work after the fact, a sales copilot operates in real-time during your <Link to="/sales-call" className="text-emerald-600 hover:text-emerald-700 font-medium">sales calls</Link>, providing instant <Link to="/objection-handling" className=\"text-emerald-600 hover:text-emerald-700 font-medium">objection handling</Link> support, <Link to="/persuasive-insight" className=\"text-emerald-600 hover:text-emerald-700 font-medium">persuasive insights</Link>, and strategic guidance that helps you navigate complex sales situations with confidence.
+                Unlike traditional sales tools that work after the fact, a sales copilot operates in real-time during your <Link to="/sales-call" className="text-emerald-600 hover:text-emerald-700 font-medium">sales calls</Link>, providing instant <Link to="/objection-handling" className="text-emerald-600 hover:text-emerald-700 font-medium">objection handling</Link> support, <Link to="/persuasive-insight" className="text-emerald-600 hover:text-emerald-700 font-medium">persuasive insights</Link>, and strategic guidance that helps you navigate complex sales situations with confidence.
               </p>
             </div>
           </div>
