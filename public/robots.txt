@@ -25,3 +25,7 @@ Allow: /real-time-support
 Allow: /power-your-meetings
 Allow: /real-time-ai-coaching
 Allow: /ai-for-meeting
+Allow: /ai-sales-assistant
+Allow: /sales-enablement-tool
+Allow: /real-time-sales-coaching
+Allow: /ai-sales-copilot

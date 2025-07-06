@@ -15,6 +15,10 @@ import AITeleprompterPage from './pages/AITeleprompterPage';
 import DesktopAssistantPage from './pages/DesktopAssistantPage';
 import ConversationAssistantPage from './pages/ConversationAssistantPage';
 import LiveAITranscriptionPage from './pages/LiveAITranscriptionPage';
+import AISalesAssistantPage from './pages/AISalesAssistantPage';
+import SalesEnablementToolPage from './pages/SalesEnablementToolPage';
+import RealTimeSalesCoachingPage from './pages/RealTimeSalesCoachingPage';
+import AISalesCopilotPage from './pages/AISalesCopilotPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -73,6 +77,12 @@ function App() {
             <Route path="/power-your-meetings" element={<LiveAITranscriptionPage />} />
             <Route path="/real-time-ai-coaching" element={<RealTimeConversationGuidancePage />} />
             <Route path="/ai-for-meeting" element={<LiveAITranscriptionPage />} />
+            
+            {/* Additional Sales SEO Pages */}
+            <Route path="/ai-sales-assistant" element={<AISalesAssistantPage />} />
+            <Route path="/sales-enablement-tool" element={<SalesEnablementToolPage />} />
+            <Route path="/real-time-sales-coaching" element={<RealTimeSalesCoachingPage />} />
+            <Route path="/ai-sales-copilot" element={<AISalesCopilotPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>
