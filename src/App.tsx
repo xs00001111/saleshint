@@ -42,6 +42,10 @@ import CallMeNextQuarterTimingObjectionScriptPage from './pages/CallMeNextQuarte
 import EdtechSoftwareNoBudgetObjectionResponsePage from './pages/EdtechSoftwareNoBudgetObjectionResponsePage';
 import HRTechTooManyToolsObjectionHandlingPage from './pages/HRTechTooManyToolsObjectionHandlingPage';
 import AISaasRiskOfChangeObjectionRebuttalPage from './pages/AISaasRiskOfChangeObjectionRebuttalPage';
+import SoftwareImplementationFeeObjectionResponsePage from './pages/SoftwareImplementationFeeObjectionResponsePage';
+import MartechROIObjectionRebuttalExamplesPage from './pages/MartechROIObjectionRebuttalExamplesPage';
+import SOC2ProofTemplateForSecurityObjectionsPage from './pages/SOC2ProofTemplateForSecurityObjectionsPage';
+import FintechDataPrivacyObjectionScriptPage from './pages/FintechDataPrivacyObjectionScriptPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -141,6 +145,12 @@ function App() {
             <Route path="/edtech-software-no-budget-objection-response" element={<EdtechSoftwareNoBudgetObjectionResponsePage />} />
             <Route path="/hr-tech-too-many-tools-objection-handling" element={<HRTechTooManyToolsObjectionHandlingPage />} />
             <Route path="/ai-saas-risk-of-change-objection-rebuttal" element={<AISaasRiskOfChangeObjectionRebuttalPage />} />
+            
+            {/* Additional Objection Pages */}
+            <Route path="/software-implementation-fee-objection-response" element={<SoftwareImplementationFeeObjectionResponsePage />} />
+            <Route path="/martech-roi-objection-rebuttal-examples" element={<MartechROIObjectionRebuttalExamplesPage />} />
+            <Route path="/soc2-proof-template-for-security-objections" element={<SOC2ProofTemplateForSecurityObjectionsPage />} />
+            <Route path="/fintech-data-privacy-objection-script" element={<FintechDataPrivacyObjectionScriptPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>

@@ -19,6 +19,10 @@ Allow: /call-me-next-quarter-timing-objection-script
 Allow: /edtech-software-no-budget-objection-response
 Allow: /hr-tech-too-many-tools-objection-handling
 Allow: /ai-saas-risk-of-change-objection-rebuttal
+Allow: /software-implementation-fee-objection-response
+Allow: /martech-roi-objection-rebuttal-examples
+Allow: /soc2-proof-template-for-security-objections
+Allow: /fintech-data-privacy-objection-script
 Allow: /saas-pricing-objection-handling-script
 Allow: /enterprise-software-price-too-high-response
 Allow: /b2b-software-roi-objection-rebuttal
