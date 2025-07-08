@@ -46,6 +46,9 @@ import SoftwareImplementationFeeObjectionResponsePage from './pages/SoftwareImpl
 import MartechROIObjectionRebuttalExamplesPage from './pages/MartechROIObjectionRebuttalExamplesPage';
 import SOC2ProofTemplateForSecurityObjectionsPage from './pages/SOC2ProofTemplateForSecurityObjectionsPage';
 import FintechDataPrivacyObjectionScriptPage from './pages/FintechDataPrivacyObjectionScriptPage';
+import CloudMigrationSecurityConcernsResponsePage from './pages/CloudMigrationSecurityConcernsResponsePage';
+import DataScienceROIExplanationScriptsPage from './pages/DataScienceROIExplanationScriptsPage';
+import APIPerformanceScalabilityExplanationPage from './pages/APIPerformanceScalabilityExplanationPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -151,6 +154,11 @@ function App() {
             <Route path="/martech-roi-objection-rebuttal-examples" element={<MartechROIObjectionRebuttalExamplesPage />} />
             <Route path="/soc2-proof-template-for-security-objections" element={<SOC2ProofTemplateForSecurityObjectionsPage />} />
             <Route path="/fintech-data-privacy-objection-script" element={<FintechDataPrivacyObjectionScriptPage />} />
+            
+            {/* Technical Description Pages */}
+            <Route path="/cloud-migration-security-concerns-response" element={<CloudMigrationSecurityConcernsResponsePage />} />
+            <Route path="/data-science-roi-explanation-scripts" element={<DataScienceROIExplanationScriptsPage />} />
+            <Route path="/api-performance-scalability-explanation" element={<APIPerformanceScalabilityExplanationPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>

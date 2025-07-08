@@ -23,6 +23,9 @@ Allow: /software-implementation-fee-objection-response
 Allow: /martech-roi-objection-rebuttal-examples
 Allow: /soc2-proof-template-for-security-objections
 Allow: /fintech-data-privacy-objection-script
+Allow: /cloud-migration-security-concerns-response
+Allow: /data-science-roi-explanation-scripts
+Allow: /api-performance-scalability-explanation
 Allow: /saas-pricing-objection-handling-script
 Allow: /enterprise-software-price-too-high-response
 Allow: /b2b-software-roi-objection-rebuttal
