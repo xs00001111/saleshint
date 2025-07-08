@@ -36,6 +36,12 @@ import B2BSoftwareROIObjectionRebuttalPage from './pages/B2BSoftwareROIObjection
 import HealthcareSaasSecurityObjectionRebuttalPage from './pages/HealthcareSaasSecurityObjectionRebuttalPage';
 import FintechAPIIntegrationObjectionHandlingPage from './pages/FintechAPIIntegrationObjectionHandlingPage';
 import ManufacturingSoftwareBudgetFreezeObjectionPage from './pages/ManufacturingSoftwareBudgetFreezeObjectionPage';
+import GDPRComplianceObjectionSaasSalesResponsePage from './pages/GDPRComplianceObjectionSaasSalesResponsePage';
+import CybersecuritySoftwareTrustObjectionReplyPage from './pages/CybersecuritySoftwareTrustObjectionReplyPage';
+import CallMeNextQuarterTimingObjectionScriptPage from './pages/CallMeNextQuarterTimingObjectionScriptPage';
+import EdtechSoftwareNoBudgetObjectionResponsePage from './pages/EdtechSoftwareNoBudgetObjectionResponsePage';
+import HRTechTooManyToolsObjectionHandlingPage from './pages/HRTechTooManyToolsObjectionHandlingPage';
+import AISaasRiskOfChangeObjectionRebuttalPage from './pages/AISaasRiskOfChangeObjectionRebuttalPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -123,12 +129,18 @@ function App() {
             
             {/* Security & Compliance Objection Pages */}
             <Route path="/healthcare-saas-security-objection-rebuttal" element={<HealthcareSaasSecurityObjectionRebuttalPage />} />
+            <Route path="/gdpr-compliance-objection-saas-sales-response" element={<GDPRComplianceObjectionSaasSalesResponsePage />} />
+            <Route path="/cybersecurity-software-trust-objection-reply" element={<CybersecuritySoftwareTrustObjectionReplyPage />} />
             
             {/* Integration & Technical Fit Pages */}
             <Route path="/fintech-api-integration-objection-handling" element={<FintechAPIIntegrationObjectionHandlingPage />} />
             
             {/* Budget-Freeze / Timing Pages */}
             <Route path="/manufacturing-software-budget-freeze-sales-objection" element={<ManufacturingSoftwareBudgetFreezeObjectionPage />} />
+            <Route path="/call-me-next-quarter-timing-objection-script" element={<CallMeNextQuarterTimingObjectionScriptPage />} />
+            <Route path="/edtech-software-no-budget-objection-response" element={<EdtechSoftwareNoBudgetObjectionResponsePage />} />
+            <Route path="/hr-tech-too-many-tools-objection-handling" element={<HRTechTooManyToolsObjectionHandlingPage />} />
+            <Route path="/ai-saas-risk-of-change-objection-rebuttal" element={<AISaasRiskOfChangeObjectionRebuttalPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>

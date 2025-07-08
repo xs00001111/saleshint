@@ -13,6 +13,12 @@ Disallow: /admin
 Allow: /healthcare-saas-security-objection-rebuttal
 Allow: /fintech-api-integration-objection-handling
 Allow: /manufacturing-software-budget-freeze-sales-objection
+Allow: /gdpr-compliance-objection-saas-sales-response
+Allow: /cybersecurity-software-trust-objection-reply
+Allow: /call-me-next-quarter-timing-objection-script
+Allow: /edtech-software-no-budget-objection-response
+Allow: /hr-tech-too-many-tools-objection-handling
+Allow: /ai-saas-risk-of-change-objection-rebuttal
 Allow: /saas-pricing-objection-handling-script
 Allow: /enterprise-software-price-too-high-response
 Allow: /b2b-software-roi-objection-rebuttal
