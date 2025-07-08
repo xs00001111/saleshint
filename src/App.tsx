@@ -24,6 +24,11 @@ import CRMSalesIntelligencePage from './pages/CRMSalesIntelligencePage';
 import SalesProductivityToolPage from './pages/SalesProductivityToolPage';
 import EmailAssistantForSalesPage from './pages/EmailAssistantForSalesPage';
 import AIPipelineInsightsPage from './pages/AIPipelineInsightsPage';
+import SDRPerformanceToolsPage from './pages/SDRPerformanceToolsPage';
+import SDRConversationGuidancePage from './pages/SDRConversationGuidancePage';
+import SDRCallScriptsPage from './pages/SDRCallScriptsPage';
+import SDRCallAssistancePage from './pages/SDRCallAssistancePage';
+import SDRProspectingToolsPage from './pages/SDRProspectingToolsPage';
 import SalesConversationAnalysisPage from './pages/SalesConversationAnalysisPage';
 import AISalesHintsPage from './pages/AISalesHintsPage';
 import BestAIForSalesTeamsPage from './pages/BestAIForSalesTeamsPage';
@@ -129,6 +134,11 @@ function App() {
             <Route path="/ai-pipeline-insights" element={<AIPipelineInsightsPage />} />
             <Route path="/sales-conversation-analysis" element={<SalesConversationAnalysisPage />} />
             <Route path="/ai-sales-hints" element={<AISalesHintsPage />} />
+            <Route path="/sdr-performance-tools" element={<SDRPerformanceToolsPage />} />
+            <Route path="/sdr-conversation-guidance" element={<SDRConversationGuidancePage />} />
+            <Route path="/sdr-call-scripts" element={<SDRCallScriptsPage />} />
+            <Route path="/sdr-call-assistance" element={<SDRCallAssistancePage />} />
+            <Route path="/sdr-prospecting-tools" element={<SDRProspectingToolsPage />} />
             <Route path="/best-ai-for-sales-teams" element={<BestAIForSalesTeamsPage />} />
             
             {/* Final Sales SEO Pages */}

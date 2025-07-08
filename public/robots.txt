@@ -54,6 +54,11 @@ Allow: /ai-sales-copilot
 Allow: /ai-for-outbound-sales
 Allow: /crm-sales-intelligence
 Allow: /sales-productivity-tool
+Allow: /sdr-performance-tools
+Allow: /sdr-conversation-guidance
+Allow: /sdr-call-scripts
+Allow: /sdr-call-assistance
+Allow: /sdr-prospecting-tools
 Allow: /email-assistant-for-sales
 Allow: /ai-pipeline-insights
 Allow: /sales-conversation-analysis
