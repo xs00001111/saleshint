@@ -26,9 +26,6 @@ Allow: /fintech-data-privacy-objection-script
 Allow: /cloud-migration-security-concerns-response
 Allow: /data-science-roi-explanation-scripts
 Allow: /api-performance-scalability-explanation
-Allow: /product-demo-script-templates-for-non-technical-sales
-Allow: /competitive-comparison-scripts-for-non-technical-sales
-Allow: /value-selling-framework-for-non-technical-products
 Allow: /saas-pricing-objection-handling-script
 Allow: /enterprise-software-price-too-high-response
 Allow: /b2b-software-roi-objection-rebuttal
