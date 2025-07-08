@@ -10,6 +10,12 @@ Disallow: /success
 Disallow: /admin
 
 # Allow SEO pages
+Allow: /healthcare-saas-security-objection-rebuttal
+Allow: /fintech-api-integration-objection-handling
+Allow: /manufacturing-software-budget-freeze-sales-objection
+Allow: /saas-pricing-objection-handling-script
+Allow: /enterprise-software-price-too-high-response
+Allow: /b2b-software-roi-objection-rebuttal
 Allow: /real-time-conversation-guidance
 Allow: /ai-teleprompter
 Allow: /magical-teleprompter

@@ -33,6 +33,9 @@ import BoostSDRPerformancePage from './pages/BoostSDRPerformancePage';
 import SaasPricingObjectionHandlingScriptPage from './pages/SaasPricingObjectionHandlingScriptPage';
 import EnterpriseSoftwarePriceTooHighResponsePage from './pages/EnterpriseSoftwarePriceTooHighResponsePage';
 import B2BSoftwareROIObjectionRebuttalPage from './pages/B2BSoftwareROIObjectionRebuttalPage';
+import HealthcareSaasSecurityObjectionRebuttalPage from './pages/HealthcareSaasSecurityObjectionRebuttalPage';
+import FintechAPIIntegrationObjectionHandlingPage from './pages/FintechAPIIntegrationObjectionHandlingPage';
+import ManufacturingSoftwareBudgetFreezeObjectionPage from './pages/ManufacturingSoftwareBudgetFreezeObjectionPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -117,6 +120,15 @@ function App() {
             <Route path="/saas-pricing-objection-handling-script" element={<SaasPricingObjectionHandlingScriptPage />} />
             <Route path="/enterprise-software-price-too-high-response" element={<EnterpriseSoftwarePriceTooHighResponsePage />} />
             <Route path="/b2b-software-roi-objection-rebuttal" element={<B2BSoftwareROIObjectionRebuttalPage />} />
+            
+            {/* Security & Compliance Objection Pages */}
+            <Route path="/healthcare-saas-security-objection-rebuttal" element={<HealthcareSaasSecurityObjectionRebuttalPage />} />
+            
+            {/* Integration & Technical Fit Pages */}
+            <Route path="/fintech-api-integration-objection-handling" element={<FintechAPIIntegrationObjectionHandlingPage />} />
+            
+            {/* Budget-Freeze / Timing Pages */}
+            <Route path="/manufacturing-software-budget-freeze-sales-objection" element={<ManufacturingSoftwareBudgetFreezeObjectionPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>
