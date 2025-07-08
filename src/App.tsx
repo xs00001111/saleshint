@@ -49,6 +49,9 @@ import FintechDataPrivacyObjectionScriptPage from './pages/FintechDataPrivacyObj
 import CloudMigrationSecurityConcernsResponsePage from './pages/CloudMigrationSecurityConcernsResponsePage';
 import DataScienceROIExplanationScriptsPage from './pages/DataScienceROIExplanationScriptsPage';
 import APIPerformanceScalabilityExplanationPage from './pages/APIPerformanceScalabilityExplanationPage';
+import ProductDemoScriptTemplatesForNonTechnicalSalesPage from './pages/ProductDemoScriptTemplatesForNonTechnicalSalesPage';
+import CompetitiveComparisonScriptsForNonTechnicalSalesPage from './pages/CompetitiveComparisonScriptsForNonTechnicalSalesPage';
+import ValueSellingFrameworkForNonTechnicalProductsPage from './pages/ValueSellingFrameworkForNonTechnicalProductsPage';
 import { Toaster } from 'react-hot-toast';
 import { analytics } from './lib/analytics';
 
@@ -159,6 +162,11 @@ function App() {
             <Route path="/cloud-migration-security-concerns-response" element={<CloudMigrationSecurityConcernsResponsePage />} />
             <Route path="/data-science-roi-explanation-scripts" element={<DataScienceROIExplanationScriptsPage />} />
             <Route path="/api-performance-scalability-explanation" element={<APIPerformanceScalabilityExplanationPage />} />
+            
+            {/* Non-Technical Product Sales Pages */}
+            <Route path="/product-demo-script-templates-for-non-technical-sales" element={<ProductDemoScriptTemplatesForNonTechnicalSalesPage />} />
+            <Route path="/competitive-comparison-scripts-for-non-technical-sales" element={<CompetitiveComparisonScriptsForNonTechnicalSalesPage />} />
+            <Route path="/value-selling-framework-for-non-technical-products" element={<ValueSellingFrameworkForNonTechnicalProductsPage />} />
           </Routes>
           <Toaster position="bottom-center" />
         </div>
