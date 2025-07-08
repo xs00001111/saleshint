@@ -32,6 +32,9 @@ Allow: /b2b-software-roi-objection-rebuttal
 Allow: /real-time-conversation-guidance
 Allow: /ai-teleprompter
 Allow: /magical-teleprompter
+Allow: /sales-teleprompter
+Allow: /virtual-teleprompter
+Allow: /undetectable-teleprompter
 Allow: /undetectable-ai
 Allow: /desktop-assistant
 Allow: /ai-desktop-assistant

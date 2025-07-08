@@ -30,6 +30,10 @@ import BestAIForSalesTeamsPage from './pages/BestAIForSalesTeamsPage';
 import HowToImproveSalesWithAIPage from './pages/HowToImproveSalesWithAIPage';
 import RealTimeAISalesGuidancePage from './pages/RealTimeAISalesGuidancePage';
 import BoostSDRPerformancePage from './pages/BoostSDRPerformancePage';
+import SalesTeleprompterPage from './pages/SalesTeleprompterPage';
+import VirtualTeleprompterPage from './pages/VirtualTeleprompterPage';
+import UndetectableTeleprompterPage from './pages/UndetectableTeleprompterPage';
+import MagicalTeleprompterPage from './pages/MagicalTeleprompterPage';
 import SaasPricingObjectionHandlingScriptPage from './pages/SaasPricingObjectionHandlingScriptPage';
 import EnterpriseSoftwarePriceTooHighResponsePage from './pages/EnterpriseSoftwarePriceTooHighResponsePage';
 import B2BSoftwareROIObjectionRebuttalPage from './pages/B2BSoftwareROIObjectionRebuttalPage';
@@ -95,6 +99,9 @@ function App() {
             <Route path="/real-time-conversation-guidance" element={<RealTimeConversationGuidancePage />} />
             <Route path="/ai-teleprompter" element={<AITeleprompterPage />} />
             <Route path="/magical-teleprompter" element={<AITeleprompterPage />} />
+            <Route path="/sales-teleprompter" element={<SalesTeleprompterPage />} />
+            <Route path="/virtual-teleprompter" element={<VirtualTeleprompterPage />} />
+            <Route path="/undetectable-teleprompter" element={<UndetectableTeleprompterPage />} />
             <Route path="/undetectable-ai" element={<AITeleprompterPage />} />
             <Route path="/desktop-assistant" element={<DesktopAssistantPage />} />
             <Route path="/ai-desktop-assistant" element={<DesktopAssistantPage />} />
