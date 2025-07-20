@@ -33,7 +33,7 @@ export const mockPaidPlan = {
 export const mockActiveSubscription = {
   customer_id: 'cus_123',
   subscription_id: 'sub_123',
-  subscription_status: 'active',
+  subscription_status: 'active' as const,
   price_id: 'price_123',
   current_period_start: Math.floor(Date.now() / 1000),
   current_period_end: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30 days from now
@@ -45,7 +45,7 @@ export const mockActiveSubscription = {
 export const mockInactiveSubscription = {
   customer_id: 'cus_123',
   subscription_id: null,
-  subscription_status: 'canceled',
+  subscription_status: 'canceled' as const,
   price_id: null,
   current_period_start: null,
   current_period_end: null,

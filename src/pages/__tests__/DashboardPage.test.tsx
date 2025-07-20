@@ -126,7 +126,7 @@ describe('DashboardPage', () => {
       })
 
       vi.mocked(useSubscription).mockReturnValue({
-        subscription: mockActiveSubscription,
+        subscription: { ...mockActiveSubscription, subscription_status: 'active' },
         loading: false,
         error: null,
         hasActiveSubscription: () => true,
@@ -159,7 +159,7 @@ describe('DashboardPage', () => {
       })
 
       vi.mocked(useSubscription).mockReturnValue({
-        subscription: mockActiveSubscription,
+        subscription: { ...mockActiveSubscription, subscription_status: 'active' },
         loading: false,
         error: null,
         hasActiveSubscription: () => true,
@@ -188,7 +188,7 @@ describe('DashboardPage', () => {
       })
 
       vi.mocked(useSubscription).mockReturnValue({
-        subscription: mockActiveSubscription,
+        subscription: { ...mockActiveSubscription, subscription_status: 'active' },
         loading: false,
         error: null,
         hasActiveSubscription: () => true,
