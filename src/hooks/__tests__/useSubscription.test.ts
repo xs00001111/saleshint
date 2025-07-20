@@ -95,7 +95,7 @@ describe('useSubscription', () => {
                 maybeSingle: vi.fn().mockResolvedValue({ 
                   data: mockActiveSubscription, 
                   error: null 
-                }))
+                })
               }))
             }))
           }
@@ -107,7 +107,7 @@ describe('useSubscription', () => {
                 maybeSingle: vi.fn().mockResolvedValue({ 
                   data: { id: 1, plan_type: 'monthly', status: 'active' }, 
                   error: null 
-                }))
+                })
               }))
             })),
             upsert: vi.fn().mockResolvedValue({ error: null })

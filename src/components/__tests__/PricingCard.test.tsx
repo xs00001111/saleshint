@@ -174,7 +174,7 @@ describe('PricingCard', () => {
       })
 
       renderPricingCard()
-      const button = screen.getByText('Current Plan')
+      const button = screen.getByRole('button', { name: 'Current Plan' })
       expect(button).toBeDisabled()
     })
   })

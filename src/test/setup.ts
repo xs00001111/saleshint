@@ -27,20 +27,20 @@ vi.mock('../lib/supabase', () => ({
     from: vi.fn(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          maybeSingle: vi.fn(),
-          single: vi.fn(),
+          maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+          single: vi.fn().mockResolvedValue({ data: null, error: null }),
           limit: vi.fn(() => ({
-            maybeSingle: vi.fn()
+            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null })
           }))
         })),
         is: vi.fn(() => ({
-          maybeSingle: vi.fn()
+          maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null })
         }))
       })),
-      insert: vi.fn(),
-      upsert: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn()
+      insert: vi.fn().mockResolvedValue({ data: null, error: null }),
+      upsert: vi.fn().mockResolvedValue({ data: null, error: null }),
+      update: vi.fn().mockResolvedValue({ data: null, error: null }),
+      delete: vi.fn().mockResolvedValue({ data: null, error: null })
     }))
   }
 }))

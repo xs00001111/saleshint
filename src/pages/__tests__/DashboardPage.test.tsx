@@ -49,7 +49,7 @@ describe('DashboardPage', () => {
       })
 
       renderDashboard()
-      expect(screen.getByText('Loading your dashboard...')).toBeInTheDocument()
+      expect(screen.getByText(/Loading your dashboard/i)).toBeInTheDocument()
     })
   })
 
