@@ -187,7 +187,7 @@ describe('Subscription Activation Flow', () => {
       }
 
       const hasActiveSubscription = (sub: any) => {
-        return sub?.subscription_status === 'active' && sub?.subscription_id
+        return Boolean(sub?.subscription_status === 'active' && sub?.subscription_id)
       }
 
       expect(hasActiveSubscription(activeSubscription)).toBe(true)
