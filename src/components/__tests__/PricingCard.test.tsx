@@ -140,7 +140,7 @@ describe('PricingCard', () => {
       })
 
       vi.mocked(useSubscription).mockReturnValue({
-        subscription: mockActiveSubscription,
+        subscription: { ...mockActiveSubscription, price_id: stripeProducts[0].priceId },
         loading: false,
         error: null,
         hasActiveSubscription: () => true,
