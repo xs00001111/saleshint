@@ -163,7 +163,7 @@ describe('useSubscription', () => {
                 maybeSingle: vi.fn().mockResolvedValue({ 
                   data: canceledSubscription, 
                   error: null 
-                }))
+                })
               }))
             }))
           }
