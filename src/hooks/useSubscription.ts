@@ -144,10 +144,9 @@ export const useSubscription = () => {
     // Return false if no user is signed in
     if (!user) return false;
     
-    // Check both subscription status and user plan type
-    const hasActiveStripeSubscription = subscription?.subscription_status === 'active' || subscription?.subscription_status === 'trialing';
+    // Only return true if we have a confirmed active Stripe subscription
+    const hasActiveStripeSubscription = subscription?.subscription_status === 'active' && subscription?.subscription_id;
     
-    // Also check if user has monthly plan (for cases where subscription data hasn't loaded yet)
     return hasActiveStripeSubscription;
   };
 

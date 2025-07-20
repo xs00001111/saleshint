@@ -236,12 +236,12 @@ Deno.serve(async (req) => {
       
       const optimisticPlanData = {
         user_id: user.id,
-        plan_type: 'monthly',
+        plan_type: 'free', // Keep as free until payment is confirmed
         status: 'active',
         stripe_subscription_id: null,
         stripe_customer_id: customerId,
         subscription_id: null,
-        plan_started_at: new Date().toISOString(),
+        plan_started_at: existingPlan?.plan_started_at || new Date().toISOString(),
         plan_updated_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
@@ -249,10 +249,13 @@ Deno.serve(async (req) => {
       let optimisticError;
       
       if (existingPlan) {
-        // Update existing plan
+        // Don't update existing plan to monthly until payment is confirmed
         const { error } = await supabase
           .from('user_plans')
-          .update(optimisticPlanData)
+          .update({
+            stripe_customer_id: customerId,
+            updated_at: new Date().toISOString()
+          })
           .eq('user_id', user.id);
         optimisticError = error;
       } else {
@@ -264,22 +267,28 @@ Deno.serve(async (req) => {
       }
 
       if (optimisticError) {
-        console.warn('⚠️  Failed to set optimistic plan activation:', optimisticError);
+        console.warn('⚠️  Failed to update user plan:', optimisticError);
         // Try upsert as fallback
         const { error: upsertError } = await supabase
           .from('user_plans')
-          .upsert(optimisticPlanData, { 
+          .upsert({
+            user_id: user.id,
+            plan_type: 'free',
+            status: 'active',
+            stripe_customer_id: customerId,
+            updated_at: new Date().toISOString()
+          }, { 
             onConflict: 'user_id',
             ignoreDuplicates: false 
           });
         
         if (upsertError) {
-          console.error('❌ All attempts to set optimistic activation failed:', upsertError);
+          console.error('❌ All attempts to update user plan failed:', upsertError);
         } else {
-          console.log(`✅ Optimistically activated plan via upsert for user: ${user.id}`);
+          console.log(`✅ Updated user plan via upsert for user: ${user.id}`);
         }
       } else {
-        console.log(`✅ Optimistically activated plan for user: ${user.id}`);
+        console.log(`✅ Updated user plan for user: ${user.id}`);
       }
     }
 
