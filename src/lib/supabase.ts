@@ -40,6 +40,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
         }),
         is: () => ({
           maybeSingle: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' } })
+        }),
+        limit: () => ({
+          maybeSingle: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' } }),
+          single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' } }),
+          eq: () => ({
+            maybeSingle: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' } })
+          })
         })
       }),
       insert: () => Promise.resolve({ error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' } }),

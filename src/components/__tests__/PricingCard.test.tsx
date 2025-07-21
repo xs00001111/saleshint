@@ -150,7 +150,7 @@ describe('PricingCard', () => {
       })
 
       renderPricingCard()
-      expect(screen.getByText('Current Plan')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Current Plan' })).toBeInTheDocument()
     })
 
     it('should disable button for current plan', () => {

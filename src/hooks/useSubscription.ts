@@ -145,7 +145,7 @@ export const useSubscription = () => {
     if (!user) return false;
     
     // Only return true if we have a confirmed active Stripe subscription
-    const hasActiveStripeSubscription = subscription?.subscription_status === 'active' && subscription?.subscription_id;
+    const hasActiveStripeSubscription = subscription?.subscription_status === 'active' && !!subscription?.subscription_id;
     
     return hasActiveStripeSubscription;
   };

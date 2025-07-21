@@ -40,7 +40,7 @@ describe('DashboardPage', () => {
 
       vi.mocked(useSubscription).mockReturnValue({
         subscription: null,
-        loading: false,
+        loading: true,
         error: null,
         hasActiveSubscription: () => false,
         isSubscriptionCanceled: () => false,
@@ -49,7 +49,7 @@ describe('DashboardPage', () => {
       })
 
       renderDashboard()
-      expect(screen.getByText(/Loading your dashboard/i)).toBeInTheDocument()
+      expect(screen.getByText(/Loading your dashboard\.\.\./i)).toBeInTheDocument()
     })
   })
 
@@ -77,8 +77,8 @@ describe('DashboardPage', () => {
       renderDashboard()
 
       await waitFor(() => {
-        expect(screen.getByText('Free Trial')).toBeInTheDocument()
-        expect(screen.getByText('5 calls, 5 minutes each')).toBeInTheDocument()
+        expect(screen.getAllByText('Free Trial')).toHaveLength(3)
+        expect(screen.getAllByText('5 calls, 5 minutes each')).toHaveLength(2)
         expect(screen.getByText('Download SalesHint')).toBeInTheDocument()
       })
 
@@ -138,7 +138,7 @@ describe('DashboardPage', () => {
       renderDashboard()
 
       await waitFor(() => {
-        expect(screen.getByText('Unlimited Sales Copilot')).toBeInTheDocument()
+        expect(screen.getAllByText('Unlimited Sales Copilot')).toHaveLength(2)
         expect(screen.getByText('Monthly Plan • Unlimited Usage')).toBeInTheDocument()
         expect(screen.getByText('Pro Plan')).toBeInTheDocument()
         expect(screen.getByText("You're All Set!")).toBeInTheDocument()

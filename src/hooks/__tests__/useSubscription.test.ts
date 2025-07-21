@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook, waitFor, act } from '@testing-library/react'
 import { useSubscription } from '../useSubscription'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
@@ -56,6 +56,9 @@ describe('useSubscription', () => {
       const mockSupabaseFrom = vi.fn(() => ({
         select: vi.fn(() => ({
           eq: vi.fn(() => ({
+            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null })
+          })),
+          limit: vi.fn(() => ({
             maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null })
           }))
         })),
@@ -238,7 +241,9 @@ describe('useSubscription', () => {
       expect(result.current.subscription).toBe(null)
 
       // Trigger refetch
-      await result.current.refetch()
+      await act(async () => {
+        await result.current.refetch()
+      })
 
       await waitFor(() => {
         expect(result.current.subscription).toEqual(expect.objectContaining({

@@ -348,10 +348,10 @@ const DashboardPage: React.FC = () => {
                         Questions about your subscription?
                       </p>
                       <a 
-                        href="mailto:founders@interm.ai"
+                        href="mailto:founders@saleshint.com"
                         className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
                       >
-                        Contact founders@interm.ai
+                        Contact founders@saleshint.com
                       </a>
                     </div>
                   </div>
