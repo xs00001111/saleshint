@@ -5,9 +5,35 @@ declare global {
   }
 }
 
+// Check if analytics should be disabled for non-production environments
+const shouldDisableAnalytics = (): boolean => {
+  if (typeof window === 'undefined') return true;
+  
+  const hostname = window.location.hostname;
+  const userAgent = navigator.userAgent;
+  
+  // Disable for localhost
+  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost')) {
+    return true;
+  }
+  
+  // Disable for bolt container environments
+  if (userAgent.includes('bolt') || hostname.includes('bolt') || hostname.includes('stackblitz')) {
+    return true;
+  }
+  
+  // Disable for other common dev environments
+  if (hostname.includes('gitpod') || hostname.includes('codespaces') || hostname.includes('repl.it')) {
+    return true;
+  }
+  
+  return false;
+};
+
 export const analytics = {
   // Track page views
   page: (pageName?: string) => {
+    if (shouldDisableAnalytics()) return;
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.capture('$pageview', {
         page_name: pageName
@@ -17,6 +43,7 @@ export const analytics = {
 
   // Track custom events
   track: (eventName: string, properties?: Record<string, any>) => {
+    if (shouldDisableAnalytics()) return;
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.capture(eventName, properties);
     }
@@ -24,6 +51,7 @@ export const analytics = {
 
   // Identify users
   identify: (userId: string, properties?: Record<string, any>) => {
+    if (shouldDisableAnalytics()) return;
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.identify(userId, properties);
     }
@@ -31,6 +59,7 @@ export const analytics = {
 
   // Set user properties
   setUserProperties: (properties: Record<string, any>) => {
+    if (shouldDisableAnalytics()) return;
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.setPersonProperties(properties);
     }
@@ -38,6 +67,7 @@ export const analytics = {
 
   // Reset user (on logout)
   reset: () => {
+    if (shouldDisableAnalytics()) return;
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.reset();
     }
