@@ -3,25 +3,45 @@ import React from 'react';
 const Logo = ({ className = "h-8 w-8" }: { className?: string }) => {
   return (
     <svg 
-      viewBox="0 0 32 32" 
+      viewBox="0 0 100 100" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <path 
-        d="M16 2L2 16L16 30L30 16L16 2Z" 
-        className="fill-emerald-800"
-      />
-      <path 
-        d="M16 7L9 16L16 25L23 16L16 7Z" 
-        fill="white"
-      />
-      <circle 
-        cx="16" 
-        cy="16" 
-        r="3" 
-        className="fill-emerald-800"
-      />
+      {/* Background square with rounded corners */}
+      <rect width="100" height="100" rx="12" fill="#065F46"/>
+      
+      {/* Modern "SH" monogram */}
+      <g transform="translate(20, 25)">
+        {/* Letter "S" */}
+        <path 
+          d="M5 5 C15 5, 25 10, 25 20 C25 30, 15 35, 5 35 C15 35, 25 40, 25 50 C25 60, 15 65, 5 65" 
+          stroke="white" 
+          strokeWidth="4" 
+          strokeLinecap="round" 
+          fill="none"
+        />
+        
+        {/* Letter "H" */}
+        <path d="M35 5 L35 65" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+        <path d="M35 35 L55 35" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+        <path d="M55 5 L55 65" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+      </g>
+      
+      {/* AI Circuit Pattern Accent */}
+      <g opacity="0.3" stroke="#10B981" strokeWidth="1" fill="none">
+        <circle cx="15" cy="15" r="2"/>
+        <circle cx="85" cy="15" r="2"/>
+        <circle cx="15" cy="85" r="2"/>
+        <circle cx="85" cy="85" r="2"/>
+        <line x1="15" y1="15" x2="25" y2="25"/>
+        <line x1="85" y1="15" x2="75" y2="25"/>
+        <line x1="15" y1="85" x2="25" y2="75"/>
+        <line x1="85" y1="85" x2="75" y2="75"/>
+      </g>
+      
+      {/* Sales hint dot indicator */}
+      <circle cx="80" cy="30" r="3" fill="#10B981"/>
     </svg>
   );
 };
