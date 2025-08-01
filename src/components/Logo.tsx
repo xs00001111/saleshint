@@ -8,21 +8,41 @@ const Logo = ({ className = "h-8 w-8" }: { className?: string }) => {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Clean gradient background */}
+      {/* Gradient definitions */}
       <defs>
-        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style={{stopColor:"#059669"}} />
           <stop offset="100%" style={{stopColor:"#065F46"}} />
+        </linearGradient>
+        <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{stopColor:"#10B981"}} />
+          <stop offset="100%" style={{stopColor:"#059669"}} />
         </linearGradient>
       </defs>
       
       {/* Rounded square background */}
-      <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+      <rect width="100" height="100" rx="20" fill="url(#bgGradient)"/>
       
-      {/* Simple geometric design: overlapping circles creating a modern logo */}
-      <circle cx="35" cy="35" r="18" fill="white" opacity="0.9"/>
-      <circle cx="65" cy="35" r="18" fill="white" opacity="0.7"/>
-      <circle cx="50" cy="60" r="18" fill="white"/>
+      {/* Multi-shape geometric composition */}
+      {/* Large hexagon base */}
+      <polygon points="50,15 65,25 65,45 50,55 35,45 35,25" fill="white" opacity="0.9"/>
+      
+      {/* Overlapping circle */}
+      <circle cx="50" cy="40" r="16" fill="url(#accentGradient)" opacity="0.8"/>
+      
+      {/* Triangle accent */}
+      <polygon points="50,60 42,75 58,75" fill="white"/>
+      
+      {/* Small diamond */}
+      <polygon points="50,25 55,30 50,35 45,30" fill="#FDE047"/>
+      
+      {/* Rectangle bars for balance */}
+      <rect x="25" y="70" width="12" height="4" rx="2" fill="white" opacity="0.7"/>
+      <rect x="63" y="70" width="12" height="4" rx="2" fill="white" opacity="0.7"/>
+      
+      {/* Small circles for rhythm */}
+      <circle cx="25" cy="30" r="3" fill="white" opacity="0.6"/>
+      <circle cx="75" cy="30" r="3" fill="white" opacity="0.6"/>
     </svg>
   );
 };
