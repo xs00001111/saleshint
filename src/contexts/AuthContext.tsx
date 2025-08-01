@@ -7,8 +7,8 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
-  signUp: (email: string, password: string) => Promise<{ error: any }>
-  signIn: (email: string, password: string) => Promise<{ error: any }>
+  signUp: (email: string, password: string) => Promise<{ error: Error | null }>
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
 }
 
@@ -29,17 +29,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      
-      // Identify user in PostHog if logged in
-      if (session?.user) {
-        analytics.identify(session.user.id, {
-          email: session.user.email,
-          email_verified: !!session.user.email_confirmed_at,
-          created_at: session.user.created_at
-        });
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error)
+        // Clear any invalid session data
+        setSession(null)
+        setUser(null)
+      } else {
+        setSession(session)
+        setUser(session?.user ?? null)
+        
+        // Identify user in PostHog if logged in
+        if (session?.user) {
+          analytics.identify(session.user.id, {
+            email: session.user.email,
+            email_verified: !!session.user.email_confirmed_at,
+            created_at: session.user.created_at
+          });
+        }
       }
       
       setLoading(false)
@@ -48,7 +55,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state change:', event, session)
+      
+      // Handle token refresh errors
+      if (event === 'TOKEN_REFRESHED' && !session) {
+        console.warn('Token refresh failed, clearing session')
+        setSession(null)
+        setUser(null)
+        analytics.reset()
+        setLoading(false)
+        return
+      }
+      
       setSession(session)
       setUser(session?.user ?? null)
       

@@ -10,7 +10,7 @@ console.log('🔍 Supabase Environment Check:', {
   NODE_ENV: import.meta.env.MODE
 });
 
-let supabase: any;
+let supabase: ReturnType<typeof createClient>;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('❌ Missing Supabase environment variables:', {
@@ -56,11 +56,18 @@ if (!supabaseUrl || !supabaseAnonKey) {
     })
   }
   
-  // @ts-ignore - Mock client for demo purposes
+  // @ts-expect-error - Mock client for demo purposes
   supabase = mockClient
 } else {
   console.log('✅ Supabase client initialized successfully');
-  supabase = createClient(supabaseUrl, supabaseAnonKey)
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+      flowType: 'pkce'
+    }
+  })
 }
 
 export { supabase }
