@@ -8,40 +8,46 @@ const Logo = ({ className = "h-8 w-8" }: { className?: string }) => {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Background square with rounded corners */}
-      <rect width="100" height="100" rx="12" fill="#065F46"/>
+      {/* Gradient definitions */}
+      <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{stopColor:"#059669", stopOpacity:1}} />
+          <stop offset="100%" style={{stopColor:"#065F46", stopOpacity:1}} />
+        </linearGradient>
+        <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{stopColor:"#10B981", stopOpacity:1}} />
+          <stop offset="100%" style={{stopColor:"#059669", stopOpacity:1}} />
+        </linearGradient>
+      </defs>
       
-      {/* Modern "SH" monogram */}
-      <g transform="translate(20, 25)">
-        {/* Letter "S" */}
-        <path 
-          d="M5 5 C15 5, 25 10, 25 20 C25 30, 15 35, 5 35 C15 35, 25 40, 25 50 C25 60, 15 65, 5 65" 
-          stroke="white" 
-          strokeWidth="4" 
-          strokeLinecap="round" 
-          fill="none"
-        />
+      {/* Background with subtle gradient */}
+      <rect width="100" height="100" rx="20" fill="url(#bgGradient)"/>
+      
+      {/* Modern geometric sales chart/growth symbol */}
+      <g transform="translate(15, 25)">
+        {/* Sales chart bars representing growth */}
+        <rect x="5" y="35" width="8" height="15" rx="2" fill="white" opacity="0.8"/>
+        <rect x="18" y="25" width="8" height="25" rx="2" fill="white"/>
+        <rect x="31" y="15" width="8" height="35" rx="2" fill="url(#accentGradient)"/>
+        <rect x="44" y="5" width="8" height="45" rx="2" fill="white"/>
+        <rect x="57" y="10" width="8" height="40" rx="2" fill="white" opacity="0.9"/>
         
-        {/* Letter "H" */}
-        <path d="M35 5 L35 65" stroke="white" strokeWidth="4" strokeLinecap="round"/>
-        <path d="M35 35 L55 35" stroke="white" strokeWidth="4" strokeLinecap="round"/>
-        <path d="M55 5 L55 65" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+        {/* AI spark/hint element */}
+        <g transform="translate(45, 8)">
+          <circle cx="0" cy="0" r="3" fill="#FDE047"/>
+          <path d="M-6 0 L6 0 M0 -6 L0 6 M-4 -4 L4 4 M-4 4 L4 -4" stroke="#FDE047" strokeWidth="1.5" strokeLinecap="round"/>
+        </g>
       </g>
       
-      {/* AI Circuit Pattern Accent */}
-      <g opacity="0.3" stroke="#10B981" strokeWidth="1" fill="none">
-        <circle cx="15" cy="15" r="2"/>
-        <circle cx="85" cy="15" r="2"/>
-        <circle cx="15" cy="85" r="2"/>
-        <circle cx="85" cy="85" r="2"/>
-        <line x1="15" y1="15" x2="25" y2="25"/>
-        <line x1="85" y1="15" x2="75" y2="25"/>
-        <line x1="15" y1="85" x2="25" y2="75"/>
-        <line x1="85" y1="85" x2="75" y2="75"/>
+      {/* Sleek "S" icon integrated with the design */}
+      <g transform="translate(65, 60)">
+        <path d="M5 5 Q15 5 15 15 Q15 20 10 22.5 Q15 25 15 30 Q15 40 5 40" 
+              stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
       </g>
       
-      {/* Sales hint dot indicator */}
-      <circle cx="80" cy="30" r="3" fill="#10B981"/>
+      {/* Subtle corner accents */}
+      <circle cx="20" cy="20" r="2" fill="white" opacity="0.3"/>
+      <circle cx="80" cy="80" r="2" fill="white" opacity="0.3"/>
     </svg>
   );
 };
