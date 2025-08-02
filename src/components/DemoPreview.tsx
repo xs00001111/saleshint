@@ -3,14 +3,14 @@ import React from 'react';
 const DemoPreview = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto h-[700px]">
-      <div className="bg-[#1C1C1E] rounded-xl overflow-hidden shadow-2xl h-full">
+      <div className="bg-white rounded-xl overflow-hidden shadow-2xl h-full border border-gray-200">
         <iframe
           src="/demo/sales-demo.html"
           className="w-full h-full border-0"
           title="SalesHint Interactive Demo"
           style={{ 
             borderRadius: '12px',
-            background: '#1C1C1E'
+            background: '#ffffff'
           }}
         />
       </div>
