@@ -7,8 +7,8 @@ const Hero = () => {
   return (
     <section className="pt-20 pb-16 md:pt-24 md:pb-24 overflow-hidden">
       <div className="container-custom">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center">
-          <div className="w-full lg:w-1/2 mb-12 lg:mb-0 lg:pr-8 fade-in">
+        <div className="flex flex-col items-center text-center">
+          <div className="w-full max-w-4xl mb-12 fade-in">
             <div className="inline-flex items-center px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full mb-6">
               <Sparkles className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">AI Sales Assistant</span>
@@ -18,7 +18,7 @@ const Hero = () => {
               Sell Smarter with <span className="text-green-900">AI</span>
             </h1>
             
-            <p className="text-lg text-gray-600 mb-8 max-w-lg">
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Get real-time guidance during sales calls to handle objections and close more deals.
             </p>
             
@@ -28,7 +28,7 @@ const Hero = () => {
             </div>
             
             {/* Platform availability with real logos */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-sm">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
               <div className="flex items-center text-emerald-700">
                 {/* Real Apple Logo */}
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
@@ -47,7 +47,7 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="w-full lg:w-1/2 lg:pl-8 slide-in">
+          <div className="w-full slide-in">
             <DemoPreview />
           </div>
         </div>
