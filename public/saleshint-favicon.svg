@@ -1,12 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
   <!-- Green background with rounded corners -->
-  <rect width="100" height="100" rx="18" fill="#4a9216"/>
+  <rect width="100" height="100" rx="18" fill="#059669"/>
   
-  <!-- Ratio icon - two intersecting rectangles perfectly centered -->
-  <g transform="translate(50, 50)">
-    <!-- Vertical rectangle centered at origin -->
-    <rect width="12" height="20" x="-6" y="-10" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Horizontal rectangle centered at origin -->
-    <rect width="20" height="12" x="-10" y="-6" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Ratio icon - two intersecting rectangles with white stroke -->
+  <g transform="translate(50, 50) scale(2.5) translate(-12, -12)">
+    <rect width="12" height="20" x="6" y="2" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect width="20" height="12" x="2" y="6" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>

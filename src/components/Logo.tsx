@@ -9,7 +9,7 @@ const Logo = ({ className = "h-8 w-8" }: { className?: string }) => {
       className={className}
     >
       {/* Green background with rounded corners */}
-      <rect width="100" height="100" rx="18" fill="#4a9216"/>
+      <rect width="100" height="100" rx="18" fill="#059669"/>
       
       {/* Ratio icon - two intersecting rectangles with white stroke */}
       <g transform="translate(50, 50) scale(2.5) translate(-12, -12)">
