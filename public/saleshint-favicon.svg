@@ -1,13 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <!-- Green background with rounded corners - optimized for small size -->
-  <rect width="32" height="32" rx="7" fill="#4a9216"/>
+  <!-- Green background with rounded corners matching your design -->
+  <rect width="32" height="32" rx="6" fill="#4a9216"/>
   
-  <!-- Simplified ratio icon for small favicon -->
-  <g transform="translate(8, 8)">
-    <!-- Vertical rectangle -->
-    <rect width="6" height="11" x="3" y="2.5" rx="1" fill="none" stroke="white" stroke-width="1.5"/>
-    
-    <!-- Horizontal rectangle -->
-    <rect width="11" height="6" x="2.5" y="5" rx="1" fill="none" stroke="white" stroke-width="1.5"/>
+  <!-- Exact symmetric ratio icon from your provided design - smaller scale for favicon -->
+  <g transform="translate(12, 12) scale(0.8)">
+    <rect width="12" height="20" x="6" y="2" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect width="20" height="12" x="2" y="6" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
