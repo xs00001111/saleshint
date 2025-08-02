@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalesHint Demo - AI Sales Assistant</title>
+    <link rel="stylesheet" href="sales-demo.css">
+</head>
+<body>
+    <!-- Video Call Interface (Background) -->
+    <div class="video-call-overlay">
+        <div class="video-grid">
+            <div class="video-participant prospect">
+                <div class="video-placeholder">
+                    <div class="profile-avatar prospect-avatar"></div>
+                    <div class="participant-name">David Thompson - CTO</div>
+                </div>
+                <div class="speaking-indicator" id="prospectSpeaking"></div>
+            </div>
+            <div class="video-participant salesperson">
+                <div class="video-placeholder">
+                    <div class="profile-avatar salesperson-avatar"></div>
+                    <div class="participant-name">You - Account Executive</div>
+                </div>
+                <div class="speaking-indicator" id="salespersonSpeaking"></div>
+            </div>
+        </div>
+        <div class="video-controls">
+            <button class="video-btn mic-btn" data-tooltip="Mute">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                </svg>
+            </button>
+            <button class="video-btn camera-btn" data-tooltip="Turn off camera">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                </svg>
+            </button>
+            <button class="video-btn leave-btn" data-tooltip="Leave call">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.2c.27-.27.35-.67.24-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- SalesHint Interface -->
+    <div class="demo-container">
+        <div class="product-bar">
+            <div class="logo-container">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo">
+                    <rect width="100" height="100" rx="18" fill="#059669"/>
+                    <g transform="translate(50, 50) scale(2.5) translate(-12, -12)">
+                        <rect width="12" height="20" x="6" y="2" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect width="20" height="12" x="2" y="6" rx="2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                </svg>
+            </div>
+            <button class="listen" id="listenBtn">
+                <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <line x1="12" y1="19" x2="12" y2="23"/>
+                    <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+                Start Listen <span class="shortcut">(⌘L)</span>
+            </button>
+            <button class="respond">Respond <span class="shortcut">(⌘↵)</span></button>
+            <button class="objection" data-tooltip="Handle Objection">
+                <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 9v4"/>
+                    <circle cx="12" cy="17" r="1"/>
+                    <path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10z"/>
+                </svg>
+                <span class="shortcut">(⌘O)</span>
+            </button>
+            <svg class="menu-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </div>
+        
+        <div class="ai-panels" id="aiPanels" style="display: none;">
+            <div class="ai-response-panel">
+                <div class="panel-title-bar">
+                    <span>🎯 AI Sales Response</span>
+                </div>
+                <div class="panel-content" id="aiResponseContent">
+                    <div class="thinking">Analyzing conversation...</div>
+                </div>
+            </div>
+            
+            <div class="transcript-panel">
+                <div class="panel-title-bar">
+                    <span>📝 Live Transcript</span>
+                </div>
+                <div class="panel-content" id="transcriptContent">
+                    <div class="transcript-placeholder">Listening for speech...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sales-demo.js"></script>
+</body>
+</html>
