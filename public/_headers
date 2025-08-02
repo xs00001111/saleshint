@@ -12,6 +12,12 @@
   Cross-Origin-Resource-Policy: cross-origin
   Cache-Control: public, max-age=31536000
 
+# Demo pages - allow same-origin framing
+/demo/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
 # General security headers
 /*
   X-Frame-Options: DENY
