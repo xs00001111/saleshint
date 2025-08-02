@@ -246,7 +246,8 @@ button:hover {
 }
 
 button.listen {
-    background-color: #4b4b4b;
+    background-color: #2563eb;
+    color: white;
     transition: all 0.3s ease;
 }
 
@@ -265,7 +266,7 @@ button.listen.listening {
 }
 
 .notes {
-    background-color: #8b5cf6;
+    background-color: #eab308;
     color: white;
 }
 
@@ -604,7 +605,7 @@ button.listen.listening {
     color: #ffffff;
     margin: 0 0 12px 0;
     font-size: 1.1rem;
-    border-bottom: 2px solid #8b5cf6;
+    border-bottom: 2px solid #eab308;
     padding-bottom: 6px;
 }
 
@@ -620,7 +621,7 @@ button.listen.listening {
 }
 
 .note-item strong {
-    color: #8b5cf6;
+    color: #eab308;
     display: inline-block;
     width: 140px;
     flex-shrink: 0;
