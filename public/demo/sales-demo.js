@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
     
-    // Auto-start demo after 1 second
+    // Initialize demo with pulse on Start Listen button
     setTimeout(startDemo, 1000);
     
     // Listen button click handler
@@ -121,13 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     function startDemo() {
-        // Add subtle pulse to listen button
+        // Add subtle pulse to listen button to indicate it's ready
         listenBtn.style.animation = 'pulse-recording 3s infinite';
-        
-        // Auto-start the listening demo after 1.5 more seconds
-        setTimeout(() => {
-            startListening();
-        }, 1500);
     }
     
     function startListening() {
