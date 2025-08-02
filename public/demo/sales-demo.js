@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const notesBtn = document.querySelector('.notes');
     const notesModal = document.getElementById('notesModal');
     const closeNotesBtn = document.getElementById('closeNotes');
+    const emailBtn = document.querySelector('.email');
+    const emailModal = document.getElementById('emailModal');
+    const closeEmailBtn = document.getElementById('closeEmail');
+    const sendEmailBtn = document.querySelector('.send-email-btn');
     const aiPanels = document.getElementById('aiPanels');
     const aiResponseContent = document.getElementById('aiResponseContent');
     const transcriptContent = document.getElementById('transcriptContent');
@@ -114,6 +118,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Email button click handler
+    emailBtn.addEventListener('click', function() {
+        emailModal.style.display = 'flex';
+    });
+    
+    // Close email modal
+    closeEmailBtn.addEventListener('click', function() {
+        emailModal.style.display = 'none';
+    });
+    
+    // Close email modal when clicking outside
+    emailModal.addEventListener('click', function(e) {
+        if (e.target === emailModal) {
+            emailModal.style.display = 'none';
+        }
+    });
+    
+    // Send email button
+    sendEmailBtn.addEventListener('click', function() {
+        // Show success animation
+        sendEmailBtn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+            </svg>
+            Email Sent!
+        `;
+        sendEmailBtn.style.backgroundColor = '#10b981';
+        
+        // Close modal after 1.5 seconds
+        setTimeout(() => {
+            emailModal.style.display = 'none';
+            // Reset button
+            setTimeout(() => {
+                sendEmailBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22,2 15,22 11,13 2,9"/>
+                    </svg>
+                    Send Email
+                `;
+                sendEmailBtn.style.backgroundColor = '#3b82f6';
+            }, 500);
+        }, 1500);
+    });
+    
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         if ((e.metaKey || e.ctrlKey) && e.key === 'l') {
@@ -133,6 +182,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
             e.preventDefault();
             notesModal.style.display = 'flex';
+        }
+        if ((e.metaKey || e.ctrlKey) && e.key === 'e') {
+            e.preventDefault();
+            emailModal.style.display = 'flex';
         }
     });
     
@@ -257,6 +310,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Auto-close notes after 4 seconds
                     setTimeout(() => {
                         notesModal.style.display = 'none';
+                        // Show email modal 2 seconds after notes close
+                        setTimeout(() => {
+                            emailModal.style.display = 'flex';
+                            // Auto-close email after 5 seconds
+                            setTimeout(() => {
+                                emailModal.style.display = 'none';
+                            }, 5000);
+                        }, 2000);
                     }, 4000);
                 }, 4000); // Show notes 4 seconds after AI response appears
             }, 2000);

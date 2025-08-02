@@ -76,6 +76,13 @@
                 </svg>
                 <span class="shortcut">(⌘N)</span>
             </button>
+            <button class="email" data-tooltip="Send Follow-up Email">
+                <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <span class="shortcut">(⌘E)</span>
+            </button>
             <svg class="menu-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="6" r="1"/>
                 <circle cx="12" cy="12" r="1"/>
@@ -185,6 +192,62 @@
                         </div>
                         <div class="note-item">
                             <strong>Expected ROI:</strong> 15% revenue increase in 6 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Follow-up Email Modal -->
+        <div class="email-modal" id="emailModal" style="display: none;">
+            <div class="email-modal-content">
+                <div class="email-header">
+                    <h3>📧 Follow-up Email Draft</h3>
+                    <button class="close-email" id="closeEmail">&times;</button>
+                </div>
+                <div class="email-body">
+                    <div class="email-form">
+                        <div class="email-field">
+                            <label>To:</label>
+                            <input type="email" value="david.thompson@techflow.com" readonly>
+                        </div>
+                        <div class="email-field">
+                            <label>Subject:</label>
+                            <input type="text" value="Following up on our AI sales productivity discussion" readonly>
+                        </div>
+                        <div class="email-field">
+                            <label>Message:</label>
+                            <textarea readonly rows="12">Hi David,
+
+Thank you for taking the time to discuss TechFlow's sales productivity challenges today. I was impressed by your team's commitment to improving efficiency and your strategic approach to technology adoption.
+
+Based on our conversation, I wanted to highlight a few key points that align with your goals:
+
+• 30% reduction in admin time - exactly what you're targeting for your 45-person sales team
+• Seamless integration with your existing Salesforce setup
+• ROI visibility within 30 days, addressing your need for measurable results
+• Real-time AI assistance that learns from your team's successful patterns
+
+I've attached a technical overview that addresses your integration concerns and a case study from a similar software company that achieved a 40% productivity increase in their first quarter.
+
+Would you be available for a 30-minute technical deep-dive next week? I'd love to show you exactly how this would work with your current tech stack and discuss implementation timelines that align with your Q1 goals.
+
+Looking forward to continuing our conversation.
+
+Best regards,
+Mike Johnson
+Senior Sales Engineer
+SalesHint</textarea>
+                        </div>
+                        <div class="email-actions">
+                            <button class="send-email-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22,2 15,22 11,13 2,9"/>
+                                </svg>
+                                Send Email
+                            </button>
+                            <button class="save-draft-btn">Save Draft</button>
                         </div>
                     </div>
                 </div>
