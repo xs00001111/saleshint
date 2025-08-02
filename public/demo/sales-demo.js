@@ -248,6 +248,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1000);
         }
         
+        // Auto-show notes modal after first AI response is displayed
+        if (current.speaker === 'prospect' && currentStep === 0) {
+            setTimeout(() => {
+                // Wait for AI response to show, then show notes
+                setTimeout(() => {
+                    notesModal.style.display = 'flex';
+                    // Auto-close notes after 4 seconds
+                    setTimeout(() => {
+                        notesModal.style.display = 'none';
+                    }, 4000);
+                }, 4000); // Show notes 4 seconds after AI response appears
+            }, 2000);
+        }
+        
         // Continue conversation
         setTimeout(() => {
             // Remove speaking indicator
