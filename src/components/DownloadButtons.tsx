@@ -65,17 +65,17 @@ const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose, onDownlo
             {/* Intel */}
             <button
               onClick={() => onDownload('x64')}
-              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 text-left group"
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-all duration-200 text-left group"
             >
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center mr-4 group-hover:bg-emerald-600 transition-colors">
+                <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center mr-4 group-hover:bg-primary-600 transition-colors">
                   <Monitor className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-gray-900">Intel</h3>
                   <p className="text-sm text-gray-600">For Intel-based Macs (2019 and older)</p>
                 </div>
-                <Download className="h-5 w-5 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+                <Download className="h-5 w-5 text-gray-400 group-hover:text-primary-600 transition-colors" />
               </div>
             </button>
           </div>

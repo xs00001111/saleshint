@@ -53,7 +53,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <Link 
                 to="/dashboard"
-                className="text-emerald-800 hover:text-emerald-900 font-medium transition-colors"
+                className="text-primary-800 hover:text-emerald-900 font-medium transition-colors"
               >
                 Dashboard
               </Link>
@@ -63,7 +63,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-3">
               <Link 
                 to="/signin"
-                className="text-emerald-800 hover:text-emerald-900 font-medium transition-colors"
+                className="text-primary-800 hover:text-primary-900 font-medium transition-colors"
               >
                 Sign In
               </Link>
@@ -82,7 +82,7 @@ const Navbar = () => {
           <button 
             onClick={toggleMenu}
             aria-label="Toggle menu"
-            className="text-emerald-800 focus:outline-none"
+            className="text-primary-800 focus:outline-none"
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
@@ -105,7 +105,7 @@ const Navbar = () => {
                 <Link 
                   to="/dashboard"
                   onClick={() => setIsMenuOpen(false)}
-                  className="btn bg-white border border-emerald-800 text-emerald-800 hover:bg-emerald-50 w-full text-center"
+                  className="btn bg-white border border-emerald-800 text-primary-800 hover:bg-primary-50 w-full text-center"
                 >
                   Dashboard
                 </Link>
@@ -116,7 +116,7 @@ const Navbar = () => {
                 <Link 
                   to="/signin"
                   onClick={() => setIsMenuOpen(false)}
-                  className="btn bg-white border border-emerald-800 text-emerald-800 hover:bg-emerald-50 w-full text-center"
+                  className="btn bg-white border border-primary-800 text-primary-800 hover:bg-primary-50 w-full text-center"
                 >
                   Sign In
                 </Link>
