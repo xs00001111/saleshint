@@ -15,17 +15,6 @@ const DemoPreview = () => {
         />
       </div>
       
-      {/* Demo instructions overlay */}
-      <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-lg p-3 text-white text-sm">
-        <div className="flex items-center justify-between">
-          <span>🎯 Interactive Demo: Click "Start Listen" to begin the sales conversation simulation</span>
-          <div className="flex gap-2 text-xs opacity-75">
-            <span>⌘L</span>
-            <span>⌘↵</span>
-            <span>⌘N</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
