@@ -16,6 +16,30 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 pt-8 text-center">
+          <div className="mb-6 space-y-3">
+            <p className="text-gray-400">
+              Real-Time Hints Labs · 1 Dock 72 Way, Brooklyn, NY 11249
+            </p>
+            <p className="text-gray-400">
+              <a 
+                href="mailto:founders@saleshint.com"
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              >
+                Contact our founders
+              </a>
+            </p>
+            <p className="text-gray-400">
+              Checkout our other project:{' '}
+              <a 
+                href="https://interm.ai/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              >
+                Interview Terminator
+              </a>
+            </p>
+          </div>
           <p className="text-gray-500 text-sm">
             &copy; {new Date().getFullYear()} SalesHint AI. All rights reserved.
           </p>
