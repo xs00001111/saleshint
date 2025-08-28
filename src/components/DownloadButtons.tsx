@@ -49,8 +49,8 @@ const DownloadButtons: React.FC<DownloadButtonsProps> = ({ variant = 'hero', cla
 
   if (variant === 'hero') {
     return (
-      <div className={`relative ${className}`} ref={dropdownRef}>
-        <div className="flex">
+      <div className={`relative flex justify-center ${className}`} ref={dropdownRef}>
+        <div className="inline-flex">
           <button
             onClick={handleDefaultDownload}
             className="btn bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl inline-flex items-center justify-center px-8 py-4 rounded-l-lg font-medium transition-all duration-200 text-lg"
@@ -67,7 +67,7 @@ const DownloadButtons: React.FC<DownloadButtonsProps> = ({ variant = 'hero', cla
         </div>
 
         {isDropdownOpen && (
-          <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 min-w-[280px]">
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] min-w-[280px]">
             <div className="py-2">
               <button
                 onClick={() => handleDownload('arm64')}
@@ -113,7 +113,7 @@ const DownloadButtons: React.FC<DownloadButtonsProps> = ({ variant = 'hero', cla
       </div>
 
       {isDropdownOpen && (
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 min-w-[280px]">
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] min-w-[280px]">
           <div className="py-2">
             <button
               onClick={() => handleDownload('arm64')}
