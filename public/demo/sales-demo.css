@@ -621,6 +621,7 @@ button.listen.listening {
     padding: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     line-height: 1.4;
+    color: #d4d4d4;
 }
 
 .note-item:last-child {
