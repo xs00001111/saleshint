@@ -50,24 +50,24 @@ const DownloadButtons: React.FC<DownloadButtonsProps> = ({ variant = 'hero', cla
   if (variant === 'hero') {
     return (
       <div className={`relative flex justify-center ${className}`} ref={dropdownRef}>
-        <div className="inline-flex">
+        <div className="inline-flex rounded-lg shadow-lg overflow-hidden">
           <button
             onClick={handleDefaultDownload}
-            className="btn bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl inline-flex items-center justify-center px-8 py-4 rounded-l-lg font-medium transition-all duration-200 text-lg"
+            className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center justify-center px-8 py-4 font-medium transition-all duration-200 text-lg"
           >
             <Download className="mr-3 h-6 w-6" />
             Download for Mac
           </button>
           <button
             onClick={toggleDropdown}
-            className="btn bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl inline-flex items-center justify-center px-3 py-4 rounded-r-lg border-l border-gray-700 transition-all duration-200"
+            className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center justify-center px-3 py-4 border-l border-gray-700 transition-all duration-200"
           >
             <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
         {isDropdownOpen && (
-          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] min-w-[280px]">
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-2xl border border-gray-200 min-w-[280px]" style={{ zIndex: 99999 }}>
             <div className="py-2">
               <button
                 onClick={() => handleDownload('arm64')}
@@ -96,24 +96,24 @@ const DownloadButtons: React.FC<DownloadButtonsProps> = ({ variant = 'hero', cla
   // Page variant - keep the same structure for consistency
   return (
     <div className={`relative text-center ${className}`} ref={dropdownRef}>
-      <div className="inline-flex">
+      <div className="inline-flex rounded-lg shadow-lg overflow-hidden">
         <button
           onClick={handleDefaultDownload}
-          className="btn bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl inline-flex items-center justify-center px-8 py-4 rounded-l-lg font-medium transition-all duration-200 text-lg"
+          className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center justify-center px-8 py-4 font-medium transition-all duration-200 text-lg"
         >
           <Download className="mr-3 h-6 w-6" />
           Download for Mac
         </button>
         <button
           onClick={toggleDropdown}
-          className="btn bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl inline-flex items-center justify-center px-3 py-4 rounded-r-lg border-l border-gray-700 transition-all duration-200"
+          className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center justify-center px-3 py-4 border-l border-gray-700 transition-all duration-200"
         >
           <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
         </button>
       </div>
 
       {isDropdownOpen && (
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] min-w-[280px]">
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-2xl border border-gray-200 min-w-[280px]" style={{ zIndex: 99999 }}>
           <div className="py-2">
             <button
               onClick={() => handleDownload('arm64')}
