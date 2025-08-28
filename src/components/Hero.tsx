@@ -8,7 +8,7 @@ const Hero = () => {
     <section className="pt-20 pb-16 md:pt-24 md:pb-24 overflow-hidden">
       <div className="container-custom">
         <div className="flex flex-col items-center text-center">
-          <div className="w-full max-w-4xl mb-12 fade-in">
+          <div className="w-full max-w-4xl mb-24 fade-in">
             <div className="inline-flex items-center px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full mb-6">
               <Sparkles className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">AI Sales Assistant</span>
